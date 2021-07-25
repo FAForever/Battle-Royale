@@ -8,7 +8,7 @@ local function AddLandEntry(min, max, type, count)
     table.insert(Land, { Min = min, Max = max, Type = type, Count = count } )
 end
 
-AddLandEntry(0, 5, "Land T1", 10)
+AddLandEntry(0, 5, "Land T1", 5)
 AddLandEntry(5, 10, "Land T1", 10)
 AddLandEntry(8, 16, "Land T2", 4)
 AddLandEntry(15, 25, "Land T2", 8)
