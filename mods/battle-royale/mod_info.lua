@@ -1,9 +1,9 @@
 name = "Battle Royale"
-version = 2
-uid = name .. version
+version = 3
+uid = "battle-royale-03"
 
 copyright = "GNU-3"
-description = "A battle royale mod including (free of charge) care packages!"
+description = "This mod requires the UI mod Dear Windowing. Without it you will have no UI. A battle royale mod including (free of charge) care packages!"
 author = "(Jip) Willem Wijnia"
 url = "https://gitlab.com/supreme-commander-forged-alliance/mods"
 
@@ -13,7 +13,7 @@ selectable = true
 enabled = true
 exclusive = false
 ui_only = false
-requires = { "Dear Windowing7" }
+requires = { }
 requiresNames = { }
 conflicts = { }
 before = { }
