@@ -20,7 +20,7 @@ function CreateInterface(window, isReplay)
 
         if window:BeginTab("Battle Royale") then 
 
-            if model.Config.CarePackages == "on" then 
+            if model.Config.CarePackages then 
                 window:Text("Care packages")
                 window:Divider()
                 window:Space()
@@ -57,7 +57,7 @@ function CreateInterface(window, isReplay)
             end
 
             -- construct shape for care package
-            if model.Config.CarePackages == "on" then 
+            if model.Config.CarePackages then 
                 if model.CarePackage.Coordinates then 
                     local coords = model.CarePackage.Coordinates
                     table.insert(shapes, { X = (coords[1] / model.Config.Size[1]) - 0.02, Y = (coords[3] / model.Config.Size[2]) - 0.02, Width = 0.04, Height = 0.04, Solid = false, Color = "9900ffff"})

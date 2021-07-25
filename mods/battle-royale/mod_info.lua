@@ -1,5 +1,5 @@
 name = "Battle Royale"
-version = 1
+version = 2
 uid = name .. version
 
 copyright = "GNU-3"
