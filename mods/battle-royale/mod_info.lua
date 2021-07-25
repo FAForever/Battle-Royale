@@ -1,6 +1,6 @@
 name = "Battle Royale"
-version = 3
-uid = "battle-royale-03"
+version = 4
+uid = "battle-royale-04"
 
 copyright = "GNU-3"
 description = "This mod requires the UI mod Dear Windowing. Without it you will have no UI. A battle royale mod including (free of charge) care packages!"

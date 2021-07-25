@@ -56,24 +56,24 @@ function Entrypoint(isReplay)
             -- that Dear Windowing is loaded in. Otherwise we go in empty handed :)
 
             local found = false
-            local count = 10
-            while count > 0 do 
-                WaitSeconds(1.0)
-
-                -- are we there yet?
-                found = _G.DearWindow and _G.DearWindowVersion
-                if found then 
-                    LOG("Found Dear Windowing version (" .. tostring(_G.DearWindowVersion) .. ")")
-                    _CreateInterface(isReplay)
+            for k, mod in __active_mods do 
+                if mod.name == "Dear Windowing" then
+                    found = true 
                     break
                 end
-
-                count = count - 1
             end
 
-            -- woopsie
-            if not found then 
-                WARN("Cannot initialize battle-royale: can not find Dear Windowing UI mod.")
+            if found then 
+                LOG("Found Dear Windowing!")
+
+                -- wait for hooks to finish
+                WaitSeconds(1.0)
+
+                -- launch the interface
+                _CreateInterface(isReplay)
+
+            else
+                WARN("Cannot initialize battle-royale: missing Dear Windowing UI mod.")
             end
         end
     )

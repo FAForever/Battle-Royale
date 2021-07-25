@@ -3,8 +3,6 @@ local conversion = import("/mods/dear-windowing/modules/conversion.lua")
 
 local percentage = 0.9
 
-
-
 function CreateInterface(window, isReplay)
 
     local model = import("/mods/battle-royale/modules/ui/model.lua")
@@ -68,7 +66,7 @@ function CreateInterface(window, isReplay)
         end
 
         if window:BeginTab("Help") then 
-            window:Text("Read the MAN page.")
+            window:Text("Read the MAN page (todo).")
         end 
 
     window:EndTabBar("main-tab-bar")

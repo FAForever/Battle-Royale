@@ -1,4 +1,6 @@
 
+
+
 --- Stores the config received from the sync in the model.
 function StoreOptions(config)
     local model = import("/mods/battle-royale/modules/ui/model.lua")
@@ -66,3 +68,28 @@ function StoreCarePackageInformation(information)
     model.Shrink.NextOffAreas = OffMapAreas(model.Shrink.NextArea, model.Shrink.CurrentArea, model.Config.Size)
 end
 
+-- {
+--     title = string,
+--     subTitle = string
+--     sound = {
+--        cue = string,
+--        bank = string,
+--    }
+-- }
+function ProcessAnnouncement(data)
+
+    -- create an actual announcement
+    local Announcement = import('/lua/ui/game/announcement.lua');
+    Announcement.CreateAnnouncement(data.title, GetFrame(0), data.subTitle)
+
+    -- if there is sound, add it 
+    if data.sound then 
+        ForkThread(
+            function()
+                WaitSeconds(1.0)
+                local sound = Sound({Cue = data.sound.cue, Bank = data.sound.bank})
+                PlaySound(sound)
+            end
+        )
+    end
+end

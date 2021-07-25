@@ -315,7 +315,7 @@ function ShrinkingThread(type, rate)
     end
     -- makes a side shrink less and less to even it out
 
-    local ShrinkDecreaser = 0.90
+    local ShrinkDecreaser = 0.92
     local ShrinkMultiplier = { 1.0, 1.0, 1.0, 1.0 }
 
     -- get map size

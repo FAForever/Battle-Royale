@@ -24,5 +24,11 @@ function OnSync()
         controller.StoreCarePackageInformation(Sync.BattleRoyale.Shrink)
     end
 
+    -- send an announcement
+    if Sync.SendAnnouncement then
+        local controller = import("/mods/battle-royale/modules/ui/controller.lua")
+        controller.ProcessAnnouncement(Sync.SendAnnouncement)
+    end
+
 
 end 

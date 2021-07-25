@@ -51,18 +51,18 @@ AIOpts = {
         values = {
             {
                 text = "Slow",
-                help = "The battlefield shrinks every 120 seconds.",
-                key = 120,
+                help = "The battlefield shrinks every 180 seconds.",
+                key = 180,
             },
             {
                 text = "Mediocre",
-                help = "The battlefield shrinks every 100 seconds.",
-                key = 100,
+                help = "The battlefield shrinks every 140 seconds.",
+                key = 140,
             },
             {
                 text = "Fast",
-                help = "The battlefield shrinks every 80 seconds.",
-                key = 80,
+                help = "The battlefield shrinks every 100 seconds.",
+                key = 100,
             },
         },
     },

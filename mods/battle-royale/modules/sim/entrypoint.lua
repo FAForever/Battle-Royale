@@ -1,6 +1,7 @@
 
 function Entrypoint()
 
+    local utils = import("/mods/battle-royale/modules/sim/utils.lua")
     local controller = import("/mods/battle-royale/modules/sim/controller.lua")
     local options = import("/mods/battle-royale/lua/ai/lobbyoptions/lobbyoptions.lua").AIOpts
 
@@ -27,6 +28,9 @@ function Entrypoint()
         controller.UpdateNodes()
         controller.CarePackages(ScenarioInfo.Options.CarePackagesRate)
     end
+
+    -- tell people about the UI mod
+    utils.SendAnnouncement("Battle Royale", "Requires the Dear Windowing UI mod enabled", 10)
 
     -- initialize shrinking
     controller.Shrinking(ScenarioInfo.Options.ShrinkingType, ScenarioInfo.Options.ShrinkingRate)
