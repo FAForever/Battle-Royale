@@ -1,0 +1,30 @@
+UnitBlueprint {
+	Merge = true,
+	Categories = {
+        'PRODUCTSC1',
+        'SELECTABLE',
+        'UEF',
+        'STRUCTURE',
+        'VISIBLETORECON',
+        'RECLAIMABLE',
+        'OVERLAYANTIAIR',
+        'SORTDEFENSE',
+	},
+	Description = 'Care Package Beacon',
+	BlueprintId = 'ueb5103',
+	Defense = {
+			Health = 900,
+			MaxHealth = 900,
+			RegenRate = 10
+	},
+	Economy = {
+        BuildCostEnergy = 200,
+        BuildCostMass = 20,
+        BuildTime = 100,
+    },
+	Physics = {
+		BuildOnLayerCaps = {
+			LAYER_Water = true,
+		},
+	},
+}
