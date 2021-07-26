@@ -198,19 +198,17 @@ function GetRandomBlueprints(entries, count)
     return rngs
 end
 
-function CarePackages(rate)
-    ForkThread(CarePackageThread, rate)
+function CarePackages(rate, amount, curve)
+    ForkThread(CarePackageThread, rate, amount, curve)
 end
 
 --- The thread that spawns the care packages throughout the game.
-function CarePackageThread(rate)
-
-    local CarePackageInterval = rate
+function CarePackageThread(rate, amount, curve)
 
     while true do 
 
         -- wait till we spawn another one
-        WaitSeconds(CarePackageInterval)
+        WaitSeconds(rate)
 
         -- get a random node that has no beacon
         local attempts = 3
@@ -226,7 +224,7 @@ function CarePackageThread(rate)
         end
 
         -- determine number of minutes
-        local minutes = GetGameTimeSeconds() / 60
+        local minutes = curve * (GetGameTimeSeconds() / 60)
 
         -- retrieve valid entries from configuration
         local entries = false
@@ -244,7 +242,7 @@ function CarePackageThread(rate)
 
             -- retrieve random blueprints from that entry
             local model = import("/mods/battle-royale/modules/sim/model.lua")
-            local bps = GetRandomBlueprints(model.CarePackages[entry.Type], entry.Count)
+            local bps = GetRandomBlueprints(model.CarePackages[entry.Type], amount * entry.Count)
 
             -- create the care package
             SpawnCarePackage(node, bps)
@@ -255,7 +253,7 @@ function CarePackageThread(rate)
             Sync.BattleRoyale.CarePackage.Coordinates = node.Coordinates
             Sync.BattleRoyale.CarePackage.InWater = node.InWater
             Sync.BattleRoyale.CarePackage.Blueprints = bps
-            Sync.BattleRoyale.CarePackage.Interval = CarePackageInterval
+            Sync.BattleRoyale.CarePackage.Interval = rate
         end
     end
 end

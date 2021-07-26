@@ -26,13 +26,11 @@ function Entrypoint()
     -- initialize care packages if applicable
     if ScenarioInfo.Options.CarePackagesRate > 0 then 
         controller.UpdateNodes()
-        controller.CarePackages(ScenarioInfo.Options.CarePackagesRate)
+        controller.CarePackages(ScenarioInfo.Options.CarePackagesRate, ScenarioInfo.Options.CarePackagesAmount, ScenarioInfo.Options.CarePackagesCurve)
     end
 
-    -- tell people about the UI mod
-    utils.SendAnnouncement("Battle Royale", "Requires the Dear Windowing UI mod enabled", 10)
-
     -- initialize shrinking
+
     controller.Shrinking(ScenarioInfo.Options.ShrinkingType, ScenarioInfo.Options.ShrinkingRate)
     controller.VisualizeShrinking()
 

@@ -66,7 +66,42 @@ function CreateInterface(window, isReplay)
         end
 
         if window:BeginTab("Help") then 
-            window:Text("Read the MAN page (todo).")
+
+            window:BeginList("help-list", 640)
+
+            window:Space()
+
+            window:Texture("care-package-01", "/mods/battle-royale/textures/care-package-02.png", 316)
+
+            window:Text("Care packages spawn throughout the map. These contain")
+            window:Text("units that you can capture, reclaim or destroy. The beacon")
+            window:Text("is a quick-access to this functionality. Whatever happens")
+            window:Text("to the beacon happens to the rest of the units.")
+            window:Space()
+            
+            window:Texture("care-package-02", "/mods/battle-royale/textures/care-package-02.png", 316)
+            
+            window:Space()
+            window:Text("As an example, If you capture the beacon the units that go")
+            window:Text("with the beacon become your units. Radar and scouts are ")
+            window:Text("useful to find the care packages. The last care package is  ")
+            window:Text("shown as a teal box on the map preview.")
+            window:Space()
+            
+            window:Texture("care-package-03", "/mods/battle-royale/textures/care-package-03.png", 316)
+            
+            window:Space()
+            window:Text("Over time the map will shrink. The red line indicates")
+            window:Text("where the map will be after the shrink. All units that ")
+            window:Text("are on the outside are destroyed during the shrink.")
+            window:Space()
+            
+            window:Texture("shrink-01", "/mods/battle-royale/textures/shrink-01.png", 316)
+
+            window:Space()
+
+            window:EndList("help-list")
+
         end 
 
     window:EndTabBar("main-tab-bar")

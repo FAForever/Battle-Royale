@@ -1,51 +1,51 @@
 
 AIOpts = {
 
-    -- {
-    --     default = 1,
-    --     label = "Battle Royale: setup time",
-    --     help = "Determines how long it takes before the shrinking starts.",
-    --     key = 'ShrinkingDelay',
-    --     values = {
-    --         {
-    --             text = "Short",
-    --             help = "The battlefield starts shrinking after 120 seconds.",
-    --             key = 120,
-    --         },
-    --         {
-    --             text = "Medium",
-    --             help = "The battlefield starts shrinking after 240 seconds.",
-    --             key = 240,
-    --         },
-    --         {
-    --             text = "Long",
-    --             help = "The battlefield starts shrinking after 360 seconds.",
-    --             key = 360,
-    --         },
-    --     },
-    -- },
+    {
+        default = 1,
+        label = "Battle Royale: setup time",
+        help = "Determines how long it takes before the shrinking starts.",
+        key = 'ShrinkingDelay',
+        values = {
+            {
+                text = "Short",
+                help = "The battlefield starts shrinking after 120 seconds.",
+                key = 120,
+            },
+            {
+                text = "Medium",
+                help = "The battlefield starts shrinking after 240 seconds.",
+                key = 240,
+            },
+            {
+                text = "Long",
+                help = "The battlefield starts shrinking after 360 seconds.",
+                key = 360,
+            },
+        },
+    },
 
     {
         default = 1,
-        label = "Battle Royale: shrinking type",
+        label = "Shrinking type",
         help = "Determines how the battlefield shrinks over time.",
         key = 'ShrinkingType',
         values = {
             {
-                text = "Pseudo random",
-                help = "A pseudo-randomly chosen side shrinks during each iteration.",
+                text = "Random",
+                help = "A random side is chosen for shrinking.",
                 key = 'pseudorandom',
             },
             {
-                text = "Evenly",
-                help = "Each side shrinks during each iteration.",
+                text = "Square",
+                help = "Each side is chosen for shrinking, sides shrink slightly slower to compensate.",
                 key = 'evenly',
             },
         },
     },
     {
-        default = 1,
-        label = "Battle Royale: shrinking interval",
+        default = 2,
+        label = "Shrinking interval",
         help = "Determines how fast the battlefield shrinks.",
         key = 'ShrinkingRate',
         values = {
@@ -55,7 +55,7 @@ AIOpts = {
                 key = 180,
             },
             {
-                text = "Mediocre",
+                text = "Medium",
                 help = "The battlefield shrinks every 140 seconds.",
                 key = 140,
             },
@@ -64,11 +64,16 @@ AIOpts = {
                 help = "The battlefield shrinks every 100 seconds.",
                 key = 100,
             },
+            {
+                text = "Hyper",
+                help = "The battlefield shrinks every 60 seconds.",
+                key = 60,
+            },
         },
     },
     {
         default = 3,
-        label = "Battle Royale: care packages interval",
+        label = "Care packages interval",
         help = "Determines how fast care packages spawn.",
         key = 'CarePackagesRate',
         values = {
@@ -83,7 +88,7 @@ AIOpts = {
                 key = 60,
             },
             {
-                text = "Mediocre",
+                text = "Medium",
                 help = "A care package spawns every 40 seconds.",
                 key = 40,
             },
@@ -91,6 +96,57 @@ AIOpts = {
                 text = "Fast",
                 help = "A care package spawns every 20 seconds.",
                 key = 20,
+            },
+            {
+                text = "Hyper",
+                help = "A care package spawns every 10 seconds.",
+                key = 10,
+            },
+        },
+    },
+    {
+        default = 2,
+        label = "Care packages curve",
+        help = "Determines how quickly care packages become more worth in tech..",
+        key = 'CarePackagesCurve',
+        values = {
+            {
+                text = "Slow",
+                help = "Tech 3 will become available at about 30 minutes.",
+                key = 0.75,
+            },
+            {
+                text = "Medium",
+                help = "Tech 3 will become available at about 25 minutes.",
+                key = 1.0,
+            },
+            {
+                text = "Fast",
+                help = "Tech 3 will become available at about 20 minutes.",
+                key = 1.25,
+            },
+            {
+                text = "Hyper",
+                help = "Tech 3 will become available at about 15 minutes.",
+                key = 1.5,
+            },
+        },
+    },
+    {
+        default = 1,
+        label = "Care packages amount",
+        help = "Determines how quickly care packages become more worth in tech..",
+        key = 'CarePackagesAmount',
+        values = {
+            {
+                text = "Normal",
+                help = "The default number of units spawn in.",
+                key = 1.0,
+            },
+            {
+                text = "Many",
+                help = "Double the number of units spawn in.",
+                key = 2.0,
             },
         },
     },

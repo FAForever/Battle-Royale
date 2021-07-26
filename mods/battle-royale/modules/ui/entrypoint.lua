@@ -1,7 +1,7 @@
 
 local function _CreateInterface(isReplay)
 
-    local window = WindowConstruct("battle-royale", "docked-left", 350, 700)
+    local window = WindowConstruct("Battle Royale", "docked-left", 390, 700)
 
     local function toDearWindowing()
 
