@@ -326,7 +326,6 @@ function ShrinkingThread(type, rate, delay)
     local shrinkCount = 0
     local prng = import("/mods/battle-royale/modules/utils/PseudoRandom.lua").PseudoRandom:OnCreate({1, 2, 3, 4})
     
-<<<<<<< HEAD
     Sync.BattleRoyale = Sync.BattleRoyale or { }
     Sync.BattleRoyale.Shrink = { }
     Sync.BattleRoyale.Shrink.Delayed = true
@@ -334,8 +333,6 @@ function ShrinkingThread(type, rate, delay)
     Sync.BattleRoyale.Shrink.NextArea = model.PlayableArea
     Sync.BattleRoyale.Shrink.Interval = ShrinkDelay
 
-=======
->>>>>>> 84ca4e42f5068dac817df63cd9946d6517f9f7e0
     -- delay before shrinking starts
     WaitSeconds(ShrinkDelay)
 
