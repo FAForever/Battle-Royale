@@ -8,7 +8,7 @@ function StoreOptions(config)
 end
 
 --- Stores the information surrounding the next shrink from the sync in the model.
-function StoreShrinkInformation(information)
+function StoreCarePackageInformation(information)
     local model = import("/mods/battle-royale/modules/ui/model.lua")
     model.CarePackage = table.deepcopy(information)
     model.CarePackage.Timestamp = GameTime()
@@ -60,7 +60,7 @@ local function OffMapAreas(inner, outer, size)
 end
 
 --- Stores the information surrounding the current care package from the sync in the model.
-function StoreCarePackageInformation(information)
+function StoreShrinkInformation(information)
     local model = import("/mods/battle-royale/modules/ui/model.lua")
     model.Shrink = table.deepcopy(information)
     model.Shrink.Timestamp = GameTime()

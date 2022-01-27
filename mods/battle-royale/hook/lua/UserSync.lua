@@ -15,13 +15,13 @@ function OnSync()
     -- send to controller
     if Sync.BattleRoyale and Sync.BattleRoyale.CarePackage then 
         local controller = import("/mods/battle-royale/modules/ui/controller.lua")
-        controller.StoreShrinkInformation(Sync.BattleRoyale.CarePackage)
+        controller.StoreCarePackageInformation(Sync.BattleRoyale.CarePackage)
     end
 
     -- send to controller
     if Sync.BattleRoyale and Sync.BattleRoyale.Shrink then 
         local controller = import("/mods/battle-royale/modules/ui/controller.lua")
-        controller.StoreCarePackageInformation(Sync.BattleRoyale.Shrink)
+        controller.StoreShrinkInformation(Sync.BattleRoyale.Shrink)
     end
 
     -- send an announcement

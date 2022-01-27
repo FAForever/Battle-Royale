@@ -34,7 +34,12 @@ function CreateInterface(window, isReplay)
             window:Space()
 
             local curr = time - model.Shrink.Timestamp
-            window:TextWithLabel("Time remaning until next shrink: ", tostring(math.floor(model.Shrink.Interval - curr + 0.5) ), percentage)
+            if model.Shrink.Delayed then 
+                window:TextWithLabel("Time remaning until shrinking starts: ", tostring(math.floor(model.Shrink.Interval - curr + 0.5) ), percentage)
+            else 
+                window:TextWithLabel("Time remaning until next shrink: ", tostring(math.floor(model.Shrink.Interval - curr + 0.5) ), percentage)
+            end
+
             window:ProgressBar("shrink-progress", curr, model.Shrink.Interval)
 
             window:Space()

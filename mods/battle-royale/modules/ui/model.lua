@@ -20,3 +20,4 @@ Shrink.CurrentArea = { 0, 0, 512, 512 }
 Shrink.NextArea = { 0, 0, 512, 512 }
 Shrink.Interval = 40
 Shrink.Timestamp = 0
+Shrink.Delayed = true
