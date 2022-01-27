@@ -3,7 +3,7 @@ version = 7
 uid = "battle-royale-07"
 
 copyright = "GNU-3"
-description = "This mod requires the UI mod Dear Windowing. Without it you will have no UI. A battle royale mod including (free of charge) care packages!\r\n\r\nThis mod is maintained by the community. You can find it on the FAForever group on Github."
+description = "This mod requires the UI mod Dear Windowing. Without it you will have no UI. A battle royale mod including (free of charge) care packages!\r\nThis mod is maintained by the community. You can find it on the FAForever group on Github."
 author = "(Jip) Willem Wijnia, Some Developer somedeveloper05@gmail.com"
 url = "https://github.com/FAForever/Battle-Royale"
 
