@@ -295,12 +295,12 @@ end
 local ShrinkDistance = 0.05
 
 --- Causes the map to shrink over time.
-function Shrinking(type, rate)
-    ForkThread(ShrinkingThread, type, rate)
+function Shrinking(type, rate, delay)
+    ForkThread(ShrinkingThread, type, rate, delay)
 end
 
 --- Causes the map to shrink over time. Expects to run in its own thread.
-function ShrinkingThread(type, rate)
+function ShrinkingThread(type, rate, delay)
 
     -- needed for shrinking
     local ScenarioFramework = import("/lua/ScenarioFramework.lua")
@@ -308,7 +308,8 @@ function ShrinkingThread(type, rate)
     -- interpret lobby options
     local ShrinkInterval = rate 
     local ShrinkEvenly = true
-    if type == "pseudorandom" then 
+    local ShrinkDelay = delay
+    if type == "pseudorandom" then  
         ShrinkEvenly = false 
     end
     -- makes a side shrink less and less to even it out
@@ -323,6 +324,9 @@ function ShrinkingThread(type, rate)
     -- ensures one side doesn't get shrinken twice in rapid succession
     local shrinkCount = 0
     local prng = import("/mods/battle-royale/modules/utils/PseudoRandom.lua").PseudoRandom:OnCreate({1, 2, 3, 4})
+    
+    -- delay before shrinking starts
+    WaitSeconds(ShrinkDelay)
 
     while true do 
 
