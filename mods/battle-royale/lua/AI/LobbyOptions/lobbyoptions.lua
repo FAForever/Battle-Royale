@@ -2,11 +2,21 @@
 AIOpts = {
 
     {
-        default = 1,
+        default = 3,
         label = "Battle Royale: setup time",
         help = "Determines how long it takes before the shrinking starts.",
         key = 'ShrinkingDelay',
         values = {
+            {
+                text = "None",
+                help = "Disables the delay before shrinking the battlefield.",
+                key = 0,
+            },
+            {
+                text = "Very short",
+                help = "The battlefield starts shrinking after 60 seconds.",
+                key = 60,
+            },
             {
                 text = "Short",
                 help = "The battlefield starts shrinking after 120 seconds.",
@@ -40,6 +50,16 @@ AIOpts = {
                 text = "Square",
                 help = "Each side is chosen for shrinking, sides shrink slightly slower to compensate.",
                 key = 'evenly',
+            },
+            {
+                text = "Clockwise",
+                help = "The shrinking is clockwise.",
+                key = 'clockwise',
+            },
+            {
+                text = "Сounterclockwise",
+                help = "The shrinking is counterclockwise.",
+                key = 'counterclockwise',
             },
         },
     },

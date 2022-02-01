@@ -21,8 +21,14 @@ function PseudoRandom:GetValue()
     -- if not, we shuffle!
     local n = table.getn(self.collection);
     if self.index == n then
+        local lastSide = self.collection[self.index];
         self:Shuffle();
         self.index = 0;
+
+        -- excludes  twice shrinking on one side
+        while lastSide == self.collection[self.index + 1] do
+            self:Shuffle();
+        end
     end
 
     -- return the next value we wish to return.
