@@ -1,5 +1,14 @@
+
+-- name of the mod as seen in the mod manager and the client, used by the database to
+-- group mods.
 name = "Battle Royale"
+
+-- version of the mod as seen in the mod manager and is used by the client to know
+-- what the latest version is
 version = 8
+
+-- used by the client to automatically download this mod, must be unique and updated
+-- when releasing a new version
 uid = "battle-royale-08"
 
 copyright = "GNU-3"
