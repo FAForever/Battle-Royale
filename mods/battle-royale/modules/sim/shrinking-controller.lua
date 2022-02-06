@@ -59,7 +59,6 @@ function ShrinkInCircle(clockwise, model)
     local coord = getSideForShrinking(clockwise)
     local direction = getDirectionBySideNumber(coord)
     local size = getSizeBySideNumber(coord)
-    LOG(coord)
     model.AfterShrink[coord] = model.AfterShrink[coord] + direction * ShrinkMultiplier[coord] * ShrinkDistance * size
     ShrinkMultiplier[coord] = math.max(0.4, ShrinkDecreaser * ShrinkMultiplier[coord])
 end
