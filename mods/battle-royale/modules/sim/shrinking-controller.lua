@@ -1,4 +1,4 @@
---- coord matrix
+--- side / coordination matrix
 -- left = { coord = 1 , direction = 1}
 -- top = { coord = 2 , direction = 1}
 -- right = { coord = 3 , direction = -1}
@@ -11,19 +11,19 @@ local ShrinkDistance = 0.05
 local ShrinkDecreaser = 0.92
 local ShrinkMultiplier = { 1.0, 1.0, 1.0, 1.0 }
 
---- Last shrinking side, use in shrink in circle
+--- Last shrinking side, used in shrink in circle
 local LastSide = 0
 
 local import = import
 
---- Returns the direction number (1 or -1) depending on side number
+--- Returns the direction to shrink number (1 or -1) depending on what side we're shrinking
 --- @param sideNumber - side number, must be from 1 to 4
 function getDirectionBySideNumber (sideNumber)
     return sideNumber > 2 and -1 or 1
 end
 
 
---- Returns the map side size depending on side number
+--- Returns the map size depending on what side we're shrinking
 --- @param sideNumber - side number, must be from 1 to 4
 function getSizeBySideNumber (sideNumber)
     local size = ScenarioInfo.size[1]
@@ -59,6 +59,7 @@ function ShrinkInCircle(clockwise, model)
     local coord = getSideForShrinking(clockwise)
     local direction = getDirectionBySideNumber(coord)
     local size = getSizeBySideNumber(coord)
+    LOG(coord)
     model.AfterShrink[coord] = model.AfterShrink[coord] + direction * ShrinkMultiplier[coord] * ShrinkDistance * size
     ShrinkMultiplier[coord] = math.max(0.4, ShrinkDecreaser * ShrinkMultiplier[coord])
 end
@@ -92,7 +93,7 @@ end
 --- @param currentArea - current playable area
 --- @param nextArea - playable area after shrinking
 --- @param interval - period between shrinking or delay before shrinking starts
-function TellUI(isDelayed, currentArea, nextArea, interval)
+function SyncToUI(isDelayed, currentArea, nextArea, interval)
     Sync.BattleRoyale = Sync.BattleRoyale or { }
     Sync.BattleRoyale.Shrink = { }
     Sync.BattleRoyale.Shrink.Delayed = isDelayed
@@ -121,8 +122,8 @@ function ShrinkingThread(type, rate, delay)
     local nodeController = import("/mods/battle-royale/modules/sim/node-controller.lua")
     local prng = import("/mods/battle-royale/modules/utils/PseudoRandom.lua").PseudoRandom:OnCreate({1, 2, 3, 4})
 
-    -- tell  UI about the delay before shrinking
-    TellUI( true, model.PlayableArea, model.PlayableArea, delay)
+    -- tell UI about the delay before shrinking
+    SyncToUI( true, model.PlayableArea, model.PlayableArea, delay)
 
     -- delay before shrinking starts
     WaitSeconds(delay)
@@ -146,7 +147,7 @@ function ShrinkingThread(type, rate, delay)
         end
 
         -- tell  UI of the next playable area.
-        TellUI( false, model.PlayableArea, model.PlayableArea, rate)
+        SyncToUI( false, model.PlayableArea, model.PlayableArea, rate)
 
         -- wait up
         WaitSeconds(rate)
@@ -169,8 +170,10 @@ end
 --- Visualizes the playable area after shrinking. Expects to run in its own thread.
 function VisualizeShrinkingThread()
 
-    local GetTerrainHeight = GetTerrainHeight
     local color = "ff5555"
+
+    -- upvalue for performance
+    local GetTerrainHeight = GetTerrainHeight
 
     local function DrawDetailedLine(p1, p2, color, n)
         local prev = {p1[1], GetTerrainHeight(p1[1], p1[2]), p1[2]}
