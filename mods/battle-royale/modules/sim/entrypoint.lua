@@ -2,7 +2,8 @@
 function Entrypoint()
 
     local utils = import("/mods/battle-royale/modules/sim/utils.lua")
-    local controller = import("/mods/battle-royale/modules/sim/controller.lua")
+    local nodeController = import("/mods/battle-royale/modules/sim/node-controller.lua")
+    local shrinkingController = import("/mods/battle-royale/modules/sim/shrinking-controller.lua")
     local options = import("/mods/battle-royale/lua/ai/lobbyoptions/lobbyoptions.lua").AIOpts
 
     -- initialize area rect to entire map if applicable
@@ -24,14 +25,14 @@ function Entrypoint()
     Sync.BattleRoyale.Config.CarePackages = ScenarioInfo.Options.CarePackagesRate > 0
 
     -- initialize care packages if applicable
-    if ScenarioInfo.Options.CarePackagesRate > 0 then 
-        controller.UpdateNodes()
-        controller.CarePackages(ScenarioInfo.Options.CarePackagesRate, ScenarioInfo.Options.CarePackagesAmount, ScenarioInfo.Options.CarePackagesCurve)
+    if ScenarioInfo.Options.CarePackagesRate > 0 then
+        nodeController.UpdateNodes()
+        nodeController.CarePackages(ScenarioInfo.Options.CarePackagesRate, ScenarioInfo.Options.CarePackagesAmount, ScenarioInfo.Options.CarePackagesCurve)
     end
 
     -- initialize shrinking
 
-    controller.Shrinking(ScenarioInfo.Options.ShrinkingType, ScenarioInfo.Options.ShrinkingRate, ScenarioInfo.Options.ShrinkingDelay)
-    controller.VisualizeShrinking()
+    shrinkingController.Shrinking(ScenarioInfo.Options.ShrinkingType, ScenarioInfo.Options.ShrinkingRate, ScenarioInfo.Options.ShrinkingDelay)
+    shrinkingController.VisualizeShrinking()
 
 end
