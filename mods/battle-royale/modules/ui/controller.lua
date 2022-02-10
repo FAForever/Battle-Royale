@@ -14,6 +14,13 @@ function StoreCarePackageInformation(information)
     model.CarePackage.Timestamp = GameTime()
 end
 
+--- Stores information about the commander's beacon  from the sync in the model.
+function StoreBeaconInformation(information)
+    local model = import("/mods/battle-royale/modules/ui/model.lua")
+    model.Beacon = table.deepcopy(information)
+    model.Beacon.Timestamp = GameTime()
+end
+
 --- Computes the areas that are between the inner and outer rectangle.
 local function OffMapAreas(inner, outer, size)
 

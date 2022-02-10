@@ -170,4 +170,22 @@ AIOpts = {
             },
         },
     },
+    {
+        default = 1,
+        label = "<LOC br_unit_buffer_label>Battle Royale: unit buffer",
+        help = "<LOC br_unit_buffer_help>Determine what will happen to the units of the killed player.",
+        key = "TargetArmy",
+        values = {
+            {
+                text = "<LOC br_unit_buffer_values_neutral_text>Neutral army",
+                help = "<LOC br_unit_buffer_values_neutral_help>After the player is defeated, the units will be transferred to the neutral army and become non-aggressive.",
+                key = "neutral_army",
+            },
+            {
+                text = "<LOC br_unit_buffer_values_players_text>Players army",
+                help = "<LOC br_unit_buffer_values_players_help>After the defeat, the units remain with the player, but he loses control over them. Units remain hostile to opponents. Not recommended when playing in teams.",
+                key = "players_army",
+            },
+        },
+    },
 }

@@ -1,0 +1,19 @@
+UnitBlueprint {
+	Merge = true,
+	BlueprintId = 'xsc1501',
+	Defense = {
+            Health = 8000,
+            MaxHealth = 8000,
+            RegenRate = 60,
+        },
+    Display = {
+        UniformScale = 0.03
+    },
+    Description = '<LOC br_xsc1501_desc>T2 Commander Beacon',
+	Economy = {
+        BuildCostEnergy = 15000,
+        BuildCostMass = 50,
+        BuildTime = 2520,
+    },
+
+}
