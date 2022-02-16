@@ -1,3 +1,8 @@
+
+-- As by convention, we pre-append all LOC keys with 'br_', which is short for 'battle_royale_'. We do
+-- this to prevent collisions with LOC keys of the base game and / or of other mods. All mods that
+-- use localized strings should add some identifier to their LOC keys.
+
 -- delay keys
 br_delay_label="Королевская битва: время на подготовку"
 br_delay_help="Определяет время до начала сужения карты"
