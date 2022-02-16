@@ -10,6 +10,7 @@ local EffectUtils = import("/lua/EffectUtilities.lua")
 local CarePackageTeleportIn = EffectTemplates.UnitTeleport01
 local CarePackageDestroyed = table.concatenate(EffectTemplates.CommanderQuantumGateInEnergy,EffectTemplates.AGravitonBolterHit01)
 local CarePackageOnWater = EffectTemplates.DefaultSeaUnitBackWake01
+local ProblematicUnits = import("/mods/battle-royale/modules/packer/units-problematic.lua").UnitTable
 
 --- Removes nodes that became invalid because they dropped out of the map
 function UpdateNodes(nodeCount, nodes)
@@ -89,6 +90,20 @@ function SpawnCarePackage(node, bps)
         };
     end
 
+    -- computes the radius and makes adjustments if the unit is problematic
+    function ComputeRadius(bp)
+        --default radius
+        local radius = 3
+
+        for _, unit in ProblematicUnits do
+            if unit.id:lower() == bp:lower() then
+                radius = radius + unit.radiusIncrease
+            end
+        end
+
+        return radius
+    end
+
     local twoPi = 6.28
 
     -- determine total number of blueprints
@@ -102,13 +117,14 @@ function SpawnCarePackage(node, bps)
 
     -- for each blueprint...
     local units = { }
-    for k, bp in bps do 
+    for k, bp in bps do
 
         -- determine radius
-        local radius = 3 
+        local radius = ComputeRadius(bp)
+
         local l = k 
         if k > count then 
-            radius = 6
+            radius = radius * 2
             l = k - count + 0.5
         end
 
