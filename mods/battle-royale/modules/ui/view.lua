@@ -39,12 +39,12 @@ function CreateInterface(window, isReplay)
 
     local model = import("/mods/battle-royale/modules/ui/model.lua")
     local time = GameTime()
-    local battleRoyale = LOC("<LOC ui_battle_royale>Battle Royale")
-    local help = LOC("<LOC ui_help>Help")
+    local battleRoyale = LOC("<LOC br_ui_battle_royale>Battle Royale")
+    local help = LOC("<LOC br_ui_help>Help")
 
-    local helpText1 = LOC("<LOC ui_help_text_1>Care packages spawn throughout the map. These contain units that you can capture, reclaim or destroy. The beacon is a quick-access to this functionality. Whatever happens to the beacon happens to the rest of the units.")
-    local helpText2 = LOC("<LOC ui_help_text_2>As an example, If you capture the beacon the units that go with the beacon become your units. Radar and scouts are useful to find the care packages. The last care package is  shown as a teal box on the map preview.")
-    local helpText3 = LOC("<LOC ui_help_text_3>Over time the map will shrink. The red line indicates where the map will be after the shrink. All units that are on the outside are destroyed during the shrink.")
+    local helpText1 = LOC("<LOC br_ui_help_text_1>Care packages spawn throughout the map. These contain units that you can capture, reclaim or destroy. The beacon is a quick-access to this functionality. Whatever happens to the beacon happens to the rest of the units.")
+    local helpText2 = LOC("<LOC br_ui_help_text_2>As an example, If you capture the beacon the units that go with the beacon become your units. Radar and scouts are useful to find the care packages. The last care package is  shown as a teal box on the map preview.")
+    local helpText3 = LOC("<LOC br_ui_help_text_3>Over time the map will shrink. The red line indicates where the map will be after the shrink. All units that are on the outside are destroyed during the shrink.")
 
     window:Begin()
 
@@ -57,25 +57,25 @@ function CreateInterface(window, isReplay)
         if window:BeginTab(battleRoyale) then
 
             if model.Config.CarePackages then 
-                window:Text(LOC("<LOC ui_care_packages>Care packages"))
+                window:Text(LOC("<LOC br_ui_care_packages>Care packages"))
                 window:Divider()
                 window:Space()
 
                 local curr = time - model.CarePackage.Timestamp
-                window:TextWithLabel(LOC("<LOC ui_care_packages_time>Time remaning until next package: "), tostring(math.floor( model.CarePackage.Interval - curr + 0.5) ), percentage)
+                window:TextWithLabel(LOC("<LOC br_ui_care_packages_time>Time remaning until next package: "), tostring(math.floor( model.CarePackage.Interval - curr + 0.5) ), percentage)
                 window:ProgressBar("care-package-progress", curr, model.CarePackage.Interval)
                 window:Space()
             end
 
-            window:Text(LOC("<LOC ui_shrinking>Shrinking"))
+            window:Text(LOC("<LOC br_ui_shrinking>Shrinking"))
             window:Divider()
             window:Space()
 
             local curr = time - model.Shrink.Timestamp
             if model.Shrink.Delayed then 
-                window:TextWithLabel(LOC("<LOC ui_shrinking_start>Time remaning until shrinking starts: "), tostring(math.floor(model.Shrink.Interval - curr + 0.5) ), percentage)
+                window:TextWithLabel(LOC("<LOC br_ui_shrinking_start>Time remaning until shrinking starts: "), tostring(math.floor(model.Shrink.Interval - curr + 0.5) ), percentage)
             else 
-                window:TextWithLabel(LOC("<LOC ui_shrinking_next>Time remaning until next shrink: "), tostring(math.floor(model.Shrink.Interval - curr + 0.5) ), percentage)
+                window:TextWithLabel(LOC("<LOC br_ui_shrinking_next>Time remaning until next shrink: "), tostring(math.floor(model.Shrink.Interval - curr + 0.5) ), percentage)
             end
 
             window:ProgressBar("shrink-progress", curr, model.Shrink.Interval)
