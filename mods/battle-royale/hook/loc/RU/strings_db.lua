@@ -4,7 +4,7 @@
 -- use localized strings should add some identifier to their LOC keys.
 
 -- delay keys
-br_delay_label="Королевская битва: время на подготовку"
+br_delay_label="Королевская битва: время подготовки"
 br_delay_help="Определяет время до начала сужения карты"
 
 br_delay_values_none_text="Откл."
@@ -36,7 +36,7 @@ br_type_values_counterclockwise_help="Сужение происходит про
 
 --interval keys
 br_interval_label="Интервал сужения"
-br_interval_label="Определяет на сколько быстро сужается карта."
+br_interval_help="Определяет на сколько быстро сужается карта."
 
 br_interval_values_slow_text="Медленно"
 br_interval_values_medium_text="Средне"

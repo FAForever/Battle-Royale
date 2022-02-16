@@ -66,7 +66,7 @@ AIOpts = {
     {
         default = 2,
         label = "<LOC br_interval_label>Shrinking interval",
-        help = "<LOC br_interval_label>Determines how fast the battlefield shrinks.",
+        help = "<LOC br_interval_help>Determines how fast the battlefield shrinks.",
         key = 'ShrinkingRate',
         values = {
             {
