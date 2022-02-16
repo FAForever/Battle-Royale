@@ -10,7 +10,7 @@ local EffectUtils = import("/lua/EffectUtilities.lua")
 local CarePackageTeleportIn = EffectTemplates.UnitTeleport01
 local CarePackageDestroyed = table.concatenate(EffectTemplates.CommanderQuantumGateInEnergy,EffectTemplates.AGravitonBolterHit01)
 local CarePackageOnWater = EffectTemplates.DefaultSeaUnitBackWake01
-local problematicUnits = import("/mods/battle-royale/modules/packer/units-problematic.lua").UnitTable
+local ProblematicUnits = import("/mods/battle-royale/modules/packer/units-problematic.lua").UnitTable
 
 --- Removes nodes that became invalid because they dropped out of the map
 function UpdateNodes(nodeCount, nodes)
@@ -95,7 +95,7 @@ function SpawnCarePackage(node, bps)
         --default radius
         local radius = 3
 
-        for _, unit in problematicUnits do
+        for _, unit in ProblematicUnits do
             if unit.id:lower() == bp:lower() then
                 radius = radius + unit.radiusIncrease
             end
@@ -124,7 +124,7 @@ function SpawnCarePackage(node, bps)
 
         local l = k 
         if k > count then 
-            radius = 6
+            radius = radius * 2
             l = k - count + 0.5
         end
 
