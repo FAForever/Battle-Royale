@@ -3,41 +3,79 @@ local conversion = import("/mods/dear-windowing/modules/conversion.lua")
 
 local percentage = 0.9
 
+---Displays text in a window object. The text is split into substrings.
+---The length of substrings depends on param stringLenght.
+---The substring is trimmed at the last space in it to preserve the integrity of the word.
+--- @param window - window object in which you want to display the text.
+--- @param text - the text to be displayed.
+--- @param stringLength - the maximum length of the line into which the text will be divided.
+function showText(window, text, stringLength)
+    local startedIndex = 1
+
+    if text:len() < stringLength then
+        window:Text(text)
+        return
+    end
+
+    local function getLastSpaceIndex(someString)
+        return someString:len() - string.find(StringReverse(someString), " ") + 1
+    end
+
+    while startedIndex < text:len() do
+        local subString = text:sub(startedIndex, startedIndex + stringLength)
+
+        if subString:len() < stringLength then
+            window:Text(subString)
+            startedIndex = startedIndex + stringLength
+        else
+            subString = subString:sub(1, getLastSpaceIndex(subString))
+            window:Text(subString)
+            startedIndex = startedIndex + getLastSpaceIndex(subString)
+        end
+    end
+end
+
 function CreateInterface(window, isReplay)
 
     local model = import("/mods/battle-royale/modules/ui/model.lua")
     local time = GameTime()
+    local battleRoyale = LOC("<LOC br_ui_battle_royale>Battle Royale")
+    local help = LOC("<LOC br_ui_help>Help")
+
+    local helpText1 = LOC("<LOC br_ui_help_text_1>Care packages spawn throughout the map. These contain units that you can capture, reclaim or destroy. The beacon is a quick-access to this functionality. Whatever happens to the beacon happens to the rest of the units.")
+    local helpText2 = LOC("<LOC br_ui_help_text_2>As an example, If you capture the beacon the units that go with the beacon become your units. Radar and scouts are useful to find the care packages. The last care package is  shown as a teal box on the map preview.")
+    local helpText3 = LOC("<LOC br_ui_help_text_3>Over time the map will shrink. The red line indicates where the map will be after the shrink. All units that are on the outside are destroyed during the shrink.")
 
     window:Begin()
 
     window:Space()
 
-    window:BeginTabBar("main-tab-bar", { "Battle Royale", "Help" } )
+    window:BeginTabBar("main-tab-bar", { battleRoyale, help } )
 
     window:Space()
 
-        if window:BeginTab("Battle Royale") then 
+        if window:BeginTab(battleRoyale) then
 
             if model.Config.CarePackages then 
-                window:Text("Care packages")
+                window:Text(LOC("<LOC br_ui_care_packages>Care packages"))
                 window:Divider()
                 window:Space()
 
                 local curr = time - model.CarePackage.Timestamp
-                window:TextWithLabel("Time remaning until next package: ", tostring(math.floor( model.CarePackage.Interval - curr + 0.5) ), percentage)
+                window:TextWithLabel(LOC("<LOC br_ui_care_packages_time>Time remaning until next package: "), tostring(math.floor( model.CarePackage.Interval - curr + 0.5) ), percentage)
                 window:ProgressBar("care-package-progress", curr, model.CarePackage.Interval)
                 window:Space()
             end
 
-            window:Text("Shrinking")
+            window:Text(LOC("<LOC br_ui_shrinking>Shrinking"))
             window:Divider()
             window:Space()
 
             local curr = time - model.Shrink.Timestamp
             if model.Shrink.Delayed then 
-                window:TextWithLabel("Time remaning until shrinking starts: ", tostring(math.floor(model.Shrink.Interval - curr + 0.5) ), percentage)
+                window:TextWithLabel(LOC("<LOC br_ui_shrinking_start>Time remaning until shrinking starts: "), tostring(math.floor(model.Shrink.Interval - curr + 0.5) ), percentage)
             else 
-                window:TextWithLabel("Time remaning until next shrink: ", tostring(math.floor(model.Shrink.Interval - curr + 0.5) ), percentage)
+                window:TextWithLabel(LOC("<LOC br_ui_shrinking_next>Time remaning until next shrink: "), tostring(math.floor(model.Shrink.Interval - curr + 0.5) ), percentage)
             end
 
             window:ProgressBar("shrink-progress", curr, model.Shrink.Interval)
@@ -70,7 +108,7 @@ function CreateInterface(window, isReplay)
             window:MapPreview("map", model.Config.Map, shapes)
         end
 
-        if window:BeginTab("Help") then 
+        if window:BeginTab(help) then
 
             window:BeginList("help-list", 640)
 
@@ -78,27 +116,19 @@ function CreateInterface(window, isReplay)
 
             window:Texture("care-package-01", "/mods/battle-royale/textures/care-package-02.png", 316)
 
-            window:Text("Care packages spawn throughout the map. These contain")
-            window:Text("units that you can capture, reclaim or destroy. The beacon")
-            window:Text("is a quick-access to this functionality. Whatever happens")
-            window:Text("to the beacon happens to the rest of the units.")
+            showText(window, helpText1, 55)
             window:Space()
             
             window:Texture("care-package-02", "/mods/battle-royale/textures/care-package-02.png", 316)
             
             window:Space()
-            window:Text("As an example, If you capture the beacon the units that go")
-            window:Text("with the beacon become your units. Radar and scouts are ")
-            window:Text("useful to find the care packages. The last care package is  ")
-            window:Text("shown as a teal box on the map preview.")
+            showText(window, helpText2, 55)
             window:Space()
             
             window:Texture("care-package-03", "/mods/battle-royale/textures/care-package-03.png", 316)
             
             window:Space()
-            window:Text("Over time the map will shrink. The red line indicates")
-            window:Text("where the map will be after the shrink. All units that ")
-            window:Text("are on the outside are destroyed during the shrink.")
+            showText(window, helpText3, 55)
             window:Space()
             
             window:Texture("shrink-01", "/mods/battle-royale/textures/shrink-01.png", 316)
