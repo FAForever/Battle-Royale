@@ -8,11 +8,11 @@ local percentage = 0.9
 ---The substring is trimmed at the last space in it to preserve the integrity of the word.
 --- @param window - window object in which you want to display the text.
 --- @param text - the text to be displayed.
---- @param stringLength - the maximum length of the line into which the text will be divided.
-function showText(window, text, stringLength)
+--- @param maxStringLength - the maximum length of the line into which the text will be divided.
+function showText(window, text, maxStringLength)
     local startedIndex = 1
 
-    if text:len() < stringLength then
+    if text:len() < maxStringLength then
         window:Text(text)
         return
     end
@@ -22,17 +22,55 @@ function showText(window, text, stringLength)
     end
 
     while startedIndex < text:len() do
-        local subString = text:sub(startedIndex, startedIndex + stringLength)
+        local subString = text:sub(startedIndex, startedIndex + maxStringLength)
 
-        if subString:len() < stringLength then
+        if subString:len() < maxStringLength then
             window:Text(subString)
-            startedIndex = startedIndex + stringLength
+            startedIndex = startedIndex + maxStringLength
         else
             subString = subString:sub(1, getLastSpaceIndex(subString))
             window:Text(subString)
             startedIndex = startedIndex + getLastSpaceIndex(subString)
         end
     end
+end
+
+--- Displays information about the commander's beacon - the transition time to the t2 and t3 stages
+--- and information about the cost of capturing.
+--- @param window - window object in which you want to display the text.
+function displayBeaconInfo(window)
+    local time = GameTime()
+    local model = import("/mods/battle-royale/modules/ui/model.lua")
+
+    local function generateCaptureText()
+        local stage = time > model.Beacon.T3StageTime and 'T3' or time > model.Beacon.T2StageTime and 'T2' or 'T1'
+        local bp = stage == 'T3' and 100 or stage == 'T2' and 42 or 10     -- bp - build power
+        local beaconId = stage == 'T3' and 'xsc1301' or stage == 'T2' and 'xsc1501' or 'uac1301'
+        local beacon  = __blueprints[beaconId]
+        local ct = beacon.Economy.BuildTime / (bp * 2) -- ct - capture time
+        local eps = beacon.Economy.BuildCostEnergy / ct -- eps - energy per second
+        local result = LOC("<LOC br_ui_beacon_info>%s commander (%s bp) will capture in %s seconds spending %s energy per second.")
+        return result:format(stage, bp, ct, eps)
+    end
+
+    window:Text(LOC("<LOC br_ui_commander_beacon>Commanders beacon"))
+    window:Divider()
+
+    if time > model.Beacon.T2StageTime and time < model.Beacon.T3StageTime then
+        local text = LOC("<LOC br_ui_conversion_time>Time until commander's beacon conversion at %s stage: ")
+        local t3StageTime = model.Beacon.T3StageTime - model.Beacon.T2StageTime
+        local curr = time - model.Beacon.T2StageTime
+        window:TextWithLabel(text:format('T3'), tostring(math.floor( t3StageTime - curr + 0.5) ), percentage)
+        window:ProgressBar("beacon-progress", curr, t3StageTime)
+    end
+    if time < model.Beacon.T2StageTime then
+        local text = LOC("<LOC br_ui_conversion_time>Time until commander's beacon conversion at %s stage: ")
+        window:TextWithLabel(text:format('T2'), tostring(math.floor( model.Beacon.T2StageTime - time + 0.5) ), percentage)
+        window:ProgressBar("beacon-progress", time, model.Beacon.T2StageTime)
+    end
+
+    showText(window, generateCaptureText(), 55)
+    window:Space()
 end
 
 function CreateInterface(window, isReplay)
@@ -59,7 +97,6 @@ function CreateInterface(window, isReplay)
             if model.Config.CarePackages then 
                 window:Text(LOC("<LOC br_ui_care_packages>Care packages"))
                 window:Divider()
-                window:Space()
 
                 local curr = time - model.CarePackage.Timestamp
                 window:TextWithLabel(LOC("<LOC br_ui_care_packages_time>Time remaning until next package: "), tostring(math.floor( model.CarePackage.Interval - curr + 0.5) ), percentage)
@@ -69,7 +106,6 @@ function CreateInterface(window, isReplay)
 
             window:Text(LOC("<LOC br_ui_shrinking>Shrinking"))
             window:Divider()
-            window:Space()
 
             local curr = time - model.Shrink.Timestamp
             if model.Shrink.Delayed then 
@@ -81,6 +117,10 @@ function CreateInterface(window, isReplay)
             window:ProgressBar("shrink-progress", curr, model.Shrink.Interval)
 
             window:Space()
+
+            displayBeaconInfo(window)
+
+
 
             -- construct shapes of next off areas
             local shapes = { }

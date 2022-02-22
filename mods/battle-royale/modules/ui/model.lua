@@ -21,3 +21,11 @@ Shrink.NextArea = { 0, 0, 512, 512 }
 Shrink.Interval = 40
 Shrink.Timestamp = 0
 Shrink.Delayed = true
+
+-- COMMANDER BEACON --
+Beacon = { }
+Beacon.BuildCostEnergy = 0
+Beacon.BuildTime = 0
+Beacon.T2StageTime = 0
+Beacon.T3StageTime = 0
+Beacon.Timestamp = 0

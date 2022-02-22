@@ -10,7 +10,7 @@ UnitBlueprint {
         'OVERLAYANTIAIR',
         'SORTDEFENSE',
 	},
-	Description = 'Care Package Beacon',
+	Description = '<LOC br_ueb5103_desc>Care Package Beacon',
 	BlueprintId = 'ueb5103',
 	Defense = {
 			Health = 900,
