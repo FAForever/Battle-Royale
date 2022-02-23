@@ -15,5 +15,10 @@ UnitBlueprint {
         BuildCostMass = 50,
         BuildTime = 6000,
     },
+    Physics = {
+       	BuildOnLayerCaps = {
+       		LAYER_Water = true,
+       	},
+    },
 
 }

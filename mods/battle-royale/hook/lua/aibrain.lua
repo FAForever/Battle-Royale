@@ -344,7 +344,7 @@ AIBrain = Class(oldAIBrain) {
 
             --- change (3)
             if TargetArmy then
-                CreateCommanderBeacon(units, unpack(ACUDeathCoordinates:GetCoords()))
+                CreateCommanderBeacon(units, unpack(ACUDeathCoordinates:GetCoords(selfIndex)))
             else
                 local tokill = self:GetListOfUnits(categories.ALLUNITS - categories.WALL, false)
                 if tokill and not table.empty(tokill) then
