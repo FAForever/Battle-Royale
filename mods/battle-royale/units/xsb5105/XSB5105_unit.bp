@@ -1,49 +1,46 @@
 UnitBlueprint {
+    AI = {
+        TargetBones = {
+            'ball1',
+        },
+    },
     Categories = {
-        'CYBRAN',
+        'SERAPHIM',
         'STRUCTURE',
         'SIZE4',
         'VISIBLETORECON',
     },
     CollisionOffsetY = -0.25,
     Defense = {
-        AirThreatLevel = 0,
         ArmorType = 'Structure',
-        EconomyThreatLevel = 0.1,
-        Health = 10,
-        MaxHealth = 10,
-        RegenRate = 0,
-        SubThreatLevel = 0,
-        SurfaceThreatLevel = 0,
+        Health = 3000,
+        MaxHealth = 3000,
+        RegenRate = 25,
     },
-    Description = '<LOC urb5103_desc>Quantum Gate Beacon',
+    Description = 'Tech 1 Player Package',
     Display = {
         Mesh = {
             IconFadeInZoom = 130,
             LODs = {
                 {
-                    LODCutoff = 100,
+                    LODCutoff = 200,
                     Scrolling = true,
-                    ShaderName = 'Insect',
+                    ShaderName = 'Seraphim',
                 },
-                {
-                    AlbedoName = 'urb5103_lod1_albedo.dds',
-                    LODCutoff = 215,
-                    ShaderName = 'Insect',
-                    SpecularName = 'urb5103_lod1_specteam.dds',
-                },
+                -- {
+                --     AlbedoName = 'urb5103_lod1_albedo.dds',
+                --     LODCutoff = 215,
+                --     ShaderName = 'Insect',
+                --     SpecularName = 'urb5103_lod1_specteam.dds',
+                -- },
             },
         },
-        SpawnRandomRotation = false,
         UniformScale = 0.1,
     },
     Economy = {
-        BuildCostEnergy = 50,
-        BuildCostMass = 5,
-        BuildTime = 50,
-        RebuildBonusIds = {
-            'urb5103',
-        },
+        BuildCostEnergy = 5000,
+        BuildCostMass = 50,
+        BuildTime = 400,
     },
     General = {
         Category = 'Defense',
@@ -62,7 +59,7 @@ UnitBlueprint {
             RULEUCC_Stop = false,
             RULEUCC_Transport = false,
         },
-        FactionName = 'Cybran',
+        FactionName = 'Seraphim',
         Icon = 'land',
         SelectionPriority = 5,
         TechLevel = 'RULEUTL_Basic',
@@ -72,7 +69,7 @@ UnitBlueprint {
         VisionRadius = 0,
     },
     Interface = {
-        HelpText = '<LOC urb5103_help>Quantum Gateway Node',
+        HelpText = 'Tech 1 Player Package',
     },
     LifeBarHeight = 0.075,
     LifeBarOffset = 0.05,
@@ -97,11 +94,13 @@ UnitBlueprint {
         SkirtSizeZ = 1,
         TurnRate = 0,
     },
-    SelectionSizeX = 0.3,
-    SelectionSizeZ = 0.3,
-    SelectionThickness = 1.2,
+    SelectionSizeX = 0.75,
+    SelectionSizeZ = 0.75,
+    SelectionThickness = 0.75,
+
     SizeX = 1,
-    SizeY = 1,
+    SizeY = 1.5,
     SizeZ = 1,
+
     StrategicIconSortPriority = 175,
 }
