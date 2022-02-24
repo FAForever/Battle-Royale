@@ -3,7 +3,8 @@ local ACUDeathCoordinates = import('/mods/battle-royale/modules/sim/ACUInfo.lua'
 
 ACUUnit = Class(oldACU) {
     OnKilled = function(self, instigator, type, overkillRatio)
-        ACUDeathCoordinates:SetCoords(unpack(self:GetPosition()))
+        local selfIndex = self:GetAIBrain():GetArmyIndex()
+        ACUDeathCoordinates:SetCoords(selfIndex, unpack(self:GetPosition()))
         oldACU.OnKilled(self, instigator, type, overkillRatio)
     end
 }
