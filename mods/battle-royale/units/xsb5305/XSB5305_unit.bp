@@ -28,10 +28,10 @@ UnitBlueprint {
 					AlbedoName = '/mods/battle-royale/units/XSB5105/XSB5105_Albedo.dds',
 					NormalsName = '/mods/battle-royale/units/XSB5105/XSB5105_normalsTS.dds',
 					SpecularName = '/mods/battle-royale/units/XSB5105/XSB5105_SpecTeam.dds',
-                    LODCutoff = 200,
+                    LODCutoff = 10,
                     Scrolling = true,
                     ShaderName = 'Seraphim',
-                },,
+                },
                 {
                     AlbedoName = '/mods/battle-royale/units/XSB5105/XSB5105_lod1_Albedo.dds',
 					NormalsName = '/mods/battle-royale/units/XSB5105/XSB5105_lod1_normalsTS',
