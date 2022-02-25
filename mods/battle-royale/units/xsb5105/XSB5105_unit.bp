@@ -30,7 +30,7 @@ UnitBlueprint {
                 {
                     AlbedoName = 'XSB5105_lod1_Albedo.dds',
 					NormalsName = 'XSB5105_lod1_normalsTS',
-                    LODCutoff = 215,
+                    LODCutoff = 315,
                     ShaderName = 'Seraphim',
                     SpecularName = 'XSB5105_lod1_SpecTeam.dds',
                 },
