@@ -30,19 +30,19 @@ UAB5305 = Class(AStructureUnit) {
         end
 
         -- rotate a bit
-        local r = CreateRotator(self, 'UAB5305', 'y')
+        local r = CreateRotator(self, 'ball1', 'y')
         self.Trash:Add(self.r)
         r:SetSpinDown(false)
         r:SetTargetSpeed(90)
         r:SetAccel(20)
 
-        local r = CreateRotator(self, 'UAB5305_2', 'y')
+        local r = CreateRotator(self, 'ball2', 'y')
         self.Trash:Add(self.r)
         r:SetSpinDown(false)
         r:SetTargetSpeed(-60)
         r:SetAccel(20)
 
-        local r = CreateRotator(self, 'UAB5305_3', 'y')
+        local r = CreateRotator(self, 'ball3', 'y')
         self.Trash:Add(self.r)
         r:SetSpinDown(false)
         r:SetTargetSpeed(30)
