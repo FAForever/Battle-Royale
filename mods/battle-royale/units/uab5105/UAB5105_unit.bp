@@ -129,13 +129,13 @@ UnitBlueprint {
         SkirtSizeZ = 1,
         TurnRate = 0,
     },
-    SelectionSizeX = 0.45,
-    SelectionSizeZ = 0.45,
+    SelectionSizeX = 0.55,
+    SelectionSizeZ = 0.55,
     SelectionThickness = 0.75,
 
-    SizeX = 1,
-    SizeY = 1.25,
-    SizeZ = 1,
+    SizeX = 0.75,
+    SizeY = 1.5,
+    SizeX = 0.75,
 
     StrategicIconSortPriority = 175,
 }

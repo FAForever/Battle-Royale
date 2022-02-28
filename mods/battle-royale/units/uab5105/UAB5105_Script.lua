@@ -60,8 +60,8 @@ UAB5105 = Class(AStructureUnit) {
 
     DeathThread = function(self, instigator, type, overkillRatio)
 
+        -- create an explosion at each section
         for k = 1, self.Entities do 
-
             local bone = 'ball' .. k
 
             for k, effect in QuanticClusterHit do 
@@ -75,9 +75,7 @@ UAB5105 = Class(AStructureUnit) {
             end
 
             WaitSeconds(0.1)
-
             self:HideBone(bone, false)
-
         end
 
         AStructureUnit.DeathThread(self, instigator, type, overkillRatio)

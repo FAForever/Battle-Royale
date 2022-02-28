@@ -105,7 +105,7 @@ UnitBlueprint {
     SelectionThickness = 0.75,
 
     SizeX = 1,
-    SizeY = 3.0,
+    SizeY = 4.5,
     SizeZ = 1,
 
     StrategicIconSortPriority = 175,

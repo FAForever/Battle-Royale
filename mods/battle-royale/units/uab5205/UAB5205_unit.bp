@@ -18,8 +18,8 @@ UnitBlueprint {
     },
     AI = {
         TargetBones = {
-            'light',
-            'light_2',
+            'hover1',
+            'hover2',
         },
     },
     Categories = {
@@ -31,18 +31,18 @@ UnitBlueprint {
     CollisionOffsetY = -0.25,
     Defense = {
         ArmorType = 'Structure',
-        Health = 3000,
-        MaxHealth = 3000,
-        RegenRate = 25,
+        Health = 8000,
+        MaxHealth = 8000,
+        RegenRate = 60,
     },
-    Description = 'Tech 2 Player Package',
+    Description = 'Tech 3 Player Package',
     Display = {
         Mesh = {
             IconFadeInZoom = 130,
             LODs = {
                 {
-					AlbedoName = '/mods/battle-royale/units/UAB5105/UAB5105_Albedo.dds',
-					NormalsName = '/mods/battle-royale/units/UAB5105/UAB5105_normalsTS.dds',
+                    AlbedoName = '/mods/battle-royale/units/UAB5105/UAB5105_Albedo.dds',
+					NormalsName = '/mods/battle-royale/units/UAB5105/UAB5105_normalsTS',
 					SpecularName = '/mods/battle-royale/units/UAB5105/UAB5105_SpecTeam.dds',
                     LODCutoff = 200,
                     Scrolling = true,
@@ -62,7 +62,7 @@ UnitBlueprint {
                 Albedo = 'Tarmacs/Tar6x_aeon_01_albedo',
                 DeathLifetime = 300,
                 FadeOut = 150,
-                Length = 3,
+                Length = 5,
                 Normal = 'Tarmacs/Tar6x_aeon_01_normals',
                 Orientations = {
                     0,
@@ -71,15 +71,15 @@ UnitBlueprint {
                     270,
                 },
                 RemoveWhenDead = false,
-                Width = 3,
+                Width = 5,
             },
         },
         UniformScale = 0.1,
     },
     Economy = {
-        BuildCostEnergy = 5000,
+        BuildCostEnergy = 15000,
         BuildCostMass = 50,
-        BuildTime = 400,
+        BuildTime = 3000,
     },
     General = {
         Category = 'Defense',
@@ -108,7 +108,7 @@ UnitBlueprint {
         VisionRadius = 0,
     },
     Interface = {
-        HelpText = 'Tech 2 Player Package',
+        HelpText = 'Tech 1 Player Package',
     },
     LifeBarHeight = 0.075,
     LifeBarOffset = 0.05,
@@ -133,13 +133,13 @@ UnitBlueprint {
         SkirtSizeZ = 1,
         TurnRate = 0,
     },
-    SelectionSizeX = 0.45,
-    SelectionSizeZ = 0.45,
+    SelectionSizeX = 0.55,
+    SelectionSizeZ = 0.55,
     SelectionThickness = 0.75,
 
-    SizeX = 1,
-    SizeY = 1.25,
-    SizeZ = 1,
+    SizeX = 0.75,
+    SizeY = 2.25,
+    SizeX = 0.75,
 
     StrategicIconSortPriority = 175,
 }
