@@ -27,19 +27,23 @@ UnitBlueprint {
             IconFadeInZoom = 0,
             LODs = {
                 {
-                    LODCutoff = 100,
+					AlbedoName = '/mods/battle-royale/units/UEB5105/UEB5105_Albedo.dds',
+					NormalsName = '/mods/battle-royale/units/UEB5105/UEB5105_normalsTS.dds',
+					SpecularName = '/mods/battle-royale/units/UEB5105/UEB5105_SpecTeam.dds',
+                    LODCutoff = 200,
                     ShaderName = 'Unit',
                 },
                 {
-                    AlbedoName = 'ueb5103_lod1_albedo.dds',
-                    LODCutoff = 215,
+                    AlbedoName = '/mods/battle-royale/units/UEB5105/UEB5105_lod1_Albedo.dds',
+					NormalsName = '/mods/battle-royale/units/UEB5105/UEB5105_lod1_normalsTS',
+					SpecularName = '/mods/battle-royale/units/UEB5105/UEB5105_lod1_SpecTeam.dds',
+                    LODCutoff = 315,
                     ShaderName = 'Unit',
-                    SpecularName = 'ueb5103_lod1_specteam.dds',
                 },
             },
         },
         SpawnRandomRotation = false,
-        UniformScale = 0.1,
+        UniformScale = 0.15,
     },
     Economy = {
         BuildCostEnergy = 50,
