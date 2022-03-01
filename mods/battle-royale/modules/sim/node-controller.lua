@@ -4,13 +4,8 @@
 -- localize commonly used global functions for performance
 local import = import
 
-local EffectTemplates = import("/lua/EffectTemplates.lua")
-local EffectUtils = import("/lua/EffectUtilities.lua")
-
-local CarePackageTeleportIn = EffectTemplates.UnitTeleport01
-local CarePackageDestroyed = table.concatenate(EffectTemplates.CommanderQuantumGateInEnergy,EffectTemplates.AGravitonBolterHit01)
-local CarePackageOnWater = EffectTemplates.DefaultSeaUnitBackWake01
 local ProblematicUnits = import("/mods/battle-royale/modules/packer/units-problematic.lua").UnitTable
+local CreateBeacon = import('/mods/battle-royale/modules/sim/beacon-controller.lua').CreateBeacon
 
 --- Removes nodes that became invalid because they dropped out of the map
 function UpdateNodes(nodeCount, nodes)
@@ -144,54 +139,7 @@ function SpawnCarePackage(node, bps)
         table.insert(units, CreateUnitHPR(bp, "NEUTRAL_CIVILIAN", coords[1], coords[2], coords[3], 0, rad, 0 ))
     end
 
-    -- construct the beacon
-    local beacon = CreateUnitHPR('UEB5103', "NEUTRAL_CIVILIAN", cx, cy, cz, 0, offset, 0)
-    node.Beacon = beacon
-
-    -- spawn effect
-    local effects = EffectUtils.CreateEffects(beacon, 1, CarePackageTeleportIn)
-    
-    -- when reclaimed, everything dies
-    local function OnReclaimed(self) 
-        for k, unit in units do 
-            if not unit.Dead then 
-                unit:Kill()
-            end
-        end
-
-        node.Beacon = nil
-    end
-
-    -- when killed, everything dies
-    local function OnKilled(self)
-        for k, unit in units do 
-            if not unit.Dead then 
-                unit:Kill()
-            end
-        end
-
-        node.Beacon = nil
-    end
-
-    beacon:AddUnitCallback(OnKilled, "OnKilled")
-    beacon:AddUnitCallback(OnReclaimed, "OnReclaimed")
-
-    -- when captured, everything is given
-    local function OnCaptured(old, new)
-
-        local effects = EffectUtils.CreateEffects(beacon, 1, CarePackageDestroyed)
-        beacon:Destroy()
-
-        for k, unit in units do 
-            if not unit.Dead then 
-                ChangeUnitArmy(unit, new.Army)
-            end
-        end
-
-        node.Beacon = nil
-    end
-
-    beacon:AddOnCapturedCallback(OnCaptured)
+    CreateBeacon(node, units, cx, cy, cz, offset)
 end
 
 --- Retrieves a random node.

@@ -4,6 +4,7 @@ function Entrypoint()
     local utils = import("/mods/battle-royale/modules/sim/utils.lua")
     local nodeController = import("/mods/battle-royale/modules/sim/node-controller.lua")
     local shrinkingController = import("/mods/battle-royale/modules/sim/shrinking-controller.lua")
+    local beaconController = import("/mods/battle-royale/modules/sim/beacon-controller.lua")
     local options = import("/mods/battle-royale/lua/ai/lobbyoptions/lobbyoptions.lua").AIOpts
 
     -- initialize area rect to entire map if applicable
@@ -34,5 +35,7 @@ function Entrypoint()
 
     shrinkingController.Shrinking(ScenarioInfo.Options.ShrinkingType, ScenarioInfo.Options.ShrinkingRate, ScenarioInfo.Options.ShrinkingDelay)
     shrinkingController.VisualizeShrinking()
+
+    beaconController.InitStageTimeAndSyncUI(ScenarioInfo.Options.CarePackagesCurve)
 
 end

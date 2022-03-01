@@ -2,58 +2,8 @@ local oldAIBrain = AIBrain
 
 local TransferUnitsOwnership = import('/lua/SimUtils.lua').TransferUnitsOwnership
 local ACUDeathCoordinates = import('/mods/battle-royale/modules/sim/ACUInfo.lua').ACUDeathCoordinates
-local EffectTemplates = import("/lua/EffectTemplates.lua")
-local EffectUtils = import("/lua/EffectUtilities.lua")
-local CarePackageTeleportIn = EffectTemplates.UnitTeleport01
-local CarePackageDestroyed = table.concatenate(EffectTemplates.CommanderQuantumGateInEnergy,EffectTemplates.AGravitonBolterHit01)
+local CreateCommanderBeacon = import("/mods/battle-royale/modules/sim/beacon-controller.lua").CreateCommanderBeacon
 local TargetArmy = ScenarioInfo.Options.TargetArmy
-
---if multiplier = 0.75
-local T2StageTime = 1020 -- 17 minute
-local T3StageTime = 1920 -- 32 minute
-local Multiplier = ScenarioInfo.Options.CarePackagesCurve
-
---- Initializes the time at which the commander's beacon will enter the t2 and t3 stages and sync ui.
---- Depends on the CarePackagesCurve parameter defined in the lobby.
-function InitStageTimeAndSyncUI()
-    if Multiplier == 1.0 then
-        T2StageTime = 900 -- 15 minute
-        T3StageTime = 1620 -- 27 minute
-    end
-
-    if Multiplier == 1.25 then
-        T2StageTime = 720 --12 minute
-        T3StageTime = 1320 -- 22 minute
-    end
-
-    if Multiplier == 1.5 then
-        T2StageTime = 540 -- 9 minute
-        T3StageTime = 1020 -- 17 minute
-    end
-
-    Sync.BattleRoyale = Sync.BattleRoyale or { }
-    Sync.BattleRoyale.Beacon = { }
-    Sync.BattleRoyale.Beacon.T2StageTime = T2StageTime
-    Sync.BattleRoyale.Beacon.T3StageTime = T3StageTime
-end
-
-InitStageTimeAndSyncUI()
-
---- Depending on the time elapsed in the game, returns the id t1, t2 or t3 of the commander's beacon.
-function DefineBeaconId()
-    local result = 'uac1301'
-    local inGameTime = GetGameTimeSeconds()
-
-    if inGameTime > T2StageTime and inGameTime < T3StageTime then
-        result = 'xsc1501'
-    end
-
-    if inGameTime > T3StageTime then
-        result = 'xsc1301'
-    end
-
-    return result
-end
 
 function ResetUnitOrders(units)
     if units and not table.empty(units) then
@@ -76,69 +26,9 @@ function DestroyUnfinishedUnits(units)
     end
 end
 
---- Creates a beacon at the location of the death of the ACU.
---- The beacon contains a list of the killed player's units.
---- The player who captures the beacon will receive all the units of the killed player.
---- @param units - list of killed player's units
---- @param xPos, yPos, zPos - coordinates of the destroyed ACU
-function CreateCommanderBeacon(units, xPos, yPos, zPos)
-    local beaconId = DefineBeaconId()
-    local beacon = CreateUnitHPR(beaconId, "NEUTRAL_CIVILIAN", xPos, yPos, zPos, 0, 0, 0)
-
-    -- makes beacon invulnerable for 4 seconds.
-    beacon:SetCanTakeDamage(false)
-    ForkThread(function(unit)
-        if not unit then
-            return
-        end
-        WaitSeconds(4)
-        unit:SetCanTakeDamage(true) end,beacon)
-
-    -- spawn effect
-    local effects = EffectUtils.CreateEffects(beacon, 1, CarePackageTeleportIn)
-
-    -- when reclaimed, everything dies
-    local function OnReclaimed(self)
-        for k, unit in units do
-            if not unit.Dead then
-                unit:Kill()
-            end
-        end
-
-        beacon = nil
-    end
-
-    -- when killed, everything dies
-    local function OnKilled(self)
-        for k, unit in units do
-            if not unit.Dead then
-                unit:Kill()
-            end
-        end
-
-        beacon = nil
-    end
-
-
-    -- when captured, everything is given
-    local function OnCaptured(old, new)
-
-        local effects = EffectUtils.CreateEffects(beacon, 1, CarePackageDestroyed)
-        beacon:Destroy()
-        TransferUnitsOwnership(units, new.Army)
-
-        beacon = nil
-    end
-
-    beacon:AddUnitCallback(OnReclaimed, "OnReclaimed")
-    beacon:AddUnitCallback(OnKilled, "OnKilled")
-    beacon:AddOnCapturedCallback(OnCaptured)
-end
-
 --- This code is taken from the game engine.
 --- Only a small part of it has been changed.
 --- For the convenience of finding changes, they are marked as "change".
-
 AIBrain = Class(oldAIBrain) {
     OnDefeat = function(self)
         self:SetResult("defeat")
@@ -344,7 +234,7 @@ AIBrain = Class(oldAIBrain) {
 
             --- change (3)
             if TargetArmy then
-                CreateCommanderBeacon(units, unpack(ACUDeathCoordinates:GetCoords()))
+                CreateCommanderBeacon(self:GetFactionIndex(), units, unpack(ACUDeathCoordinates:GetCoords()))
             else
                 local tokill = self:GetListOfUnits(categories.ALLUNITS - categories.WALL, false)
                 if tokill and not table.empty(tokill) then
