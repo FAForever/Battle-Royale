@@ -188,4 +188,65 @@ AIOpts = {
             },
         },
     },
+    {
+        default = 4,
+        label = "<LOC br_destruction_mode_label>Unit destruction mode",
+        help = "<LOC br_destruction_mode_help>Determines whether a unit outside the playable area will be destroyed instantly or over time.",
+        key = "DestructionMode",
+        values = {
+            {
+                text = "<LOC br_destruction_mode_values_instantly_text>Instantly",
+                help = "<LOC br_destruction_mode_values_instantly_help>Any unit outside the playable area will be instantly destroyed.",
+                key = 0,
+            },
+            {
+                text = "<LOC br_destruction_mode_values_10_sec_text>10 sec",
+                help = "<LOC br_destruction_mode_values_10_sec_help>Unit with full health outside the play area will survive 10 seconds. By default, regen is ignored.",
+                key = 10,
+            },
+            {
+                text = "<LOC br_destruction_mode_values_20_sec_text>20 sec",
+                help = "<LOC br_destruction_mode_values_20_sec_help>Unit with full health outside the play area will survive 20 seconds. By default, regen is ignored.",
+                key = 20,
+            },
+            {
+                text = "<LOC br_destruction_mode_values_30_sec_text>30 sec",
+                help = "<LOC br_destruction_mode_values_30_sec_help>Unit with full health outside the play area will survive 30 seconds. By default, regen is ignored.",
+                key = 30,
+            },
+            {
+                text = "<LOC br_destruction_mode_values_40_sec_text>40 sec",
+                help = "<LOC br_destruction_mode_values_40_sec_help>Unit with full health outside the play area will survive 40 seconds. By default, regen is ignored.",
+                key = 40,
+            },
+            {
+                text = "<LOC br_destruction_mode_values_50_sec_text>50 sec",
+                help = "<LOC br_destruction_mode_values_50_sec_help>Unit with full health outside the play area will survive 50 seconds. By default, regen is ignored.",
+                key = 50,
+            },
+            {
+                text = "<LOC br_destruction_mode_values_60_sec_text>60 sec",
+                help = "<LOC br_destruction_mode_values_60_sec_help>Unit with full health outside the play area will survive 60 seconds. By default, regen is ignored.",
+                key = 60,
+            },
+        }
+    },
+    {
+        default = 1,
+        label = "<LOC br_regen_label>Regen",
+        help = "<LOC br_regen_help>Determines if health regeneration works outside the play area. Units with high regen will last longer outside the play area.",
+        key = "Regen",
+        values = {
+            {
+                text = "<LOC br_regen_values_ignore_text>Ignore",
+                help = "<LOC br_regen_values_ignore_help>Unit with full health outside the play area will die within the time specified in the destruction mode.",
+                key = 1,
+            },
+            {
+                text = "<LOC br_regen_values_consider_text>Consider",
+                help = "<LOC br_regen_values_consider_help>Health regeneration will reduce damage from non-playable area. Cybran's SACUs with a regen upgrade may not take any damage from the non-playable zone at all.",
+                key = 0,
+            },
+        },
+    },
 }
