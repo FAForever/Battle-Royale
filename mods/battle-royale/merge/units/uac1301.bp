@@ -11,9 +11,9 @@ UnitBlueprint {
     },
     Description = '<LOC br_uac1301_desc>T1 Commander Beacon',
 	Economy = {
-        BuildCostEnergy = 5000,
+        BuildCostEnergy = 4000,
         BuildCostMass = 50,
-        BuildTime = 400,
+        BuildTime = 320,
     },
     Physics = {
     	BuildOnLayerCaps = {
