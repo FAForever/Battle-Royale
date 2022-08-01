@@ -183,3 +183,9 @@ function CreateInterface(window, isReplay)
 
     window:End()
 end
+
+function ShowDeathInfo(nickname, unitsData)
+    local message = LOC("<LOC br_ui_death_info>%s was killed. Place of death is shown on the map. Capture the beacon to get %s units worth %s mass. Or destroy the beacon without letting other players capture it.")
+    message = message:format(nickname, unitsData.unitAmount, unitsData.totalMassCost)
+    PrintText(message, 20, 'ffffff', 15, 'center')
+end

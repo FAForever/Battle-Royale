@@ -21,7 +21,7 @@ function UpdateNodes(nodeCount, nodes)
     local count = 0
 
     -- playable area
-    local area = ScenarioInfo.MapData.PlayableRect
+    local area = model.PlayableArea
 
     -- find nodes that are outside
     for k = 1, model.NodeCount do 
@@ -270,39 +270,6 @@ function CarePackageThread(rate, amount, curve)
             Sync.BattleRoyale.CarePackage.InWater = node.InWater
             Sync.BattleRoyale.CarePackage.Blueprints = bps
             Sync.BattleRoyale.CarePackage.Interval = rate
-        end
-    end
-end
-
-function DestroyStrandedUnits()
-
-    local model = import("/mods/battle-royale/modules/sim/model.lua")
-
-    local function InsideRectangle(rect, coords)
-        local xBool = rect[1] < coords[1] and coords[1] < rect[3]
-        local yBool = rect[2] < coords[3] and coords[3] < rect[4]
-        return xBool and yBool
-    end
-
-    -- retrieve the brains
-    local brains = ArmyBrains
-
-    -- go over each undefeated brain
-    for k, brain in brains do 
-        if not brain:IsDefeated() then 
-            local units = brain:GetListOfUnits(categories.ALLUNITS, false, false)
-
-            -- go over each non-dead unit
-            for k, unit in units do 
-                if not unit.Dead then 
-
-                    -- take 'em out if they're outside the playable area
-                    local coords = unit:GetPosition()
-                    if not InsideRectangle(model.PlayableArea, coords) then 
-                        unit:Kill()
-                    end
-                end
-            end
         end
     end
 end

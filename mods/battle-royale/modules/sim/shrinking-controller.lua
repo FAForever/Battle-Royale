@@ -101,24 +101,28 @@ function SyncToUI(isDelayed, currentArea, nextArea, interval)
     Sync.BattleRoyale.Shrink.Interval = interval
 end
 
---- Causes the map to shrink over time.
+--- Causes the map or save area to shrink over time.
 --- @param type - shrinking type
 --- @param rate - period between shrinking
 --- @param delay - delay before shrinking
-function Shrinking(type, rate, delay)
-    ForkThread(ShrinkingThread, type, rate, delay)
+--- @param destructionTime - method of destroying units, instantaneous(0) or over time(<0)
+function Shrinking(type, rate, delay, destructionTime)
+    ForkThread(ShrinkingThread, type, rate, delay, destructionTime)
 end
 
---- Causes the map to shrink over time. Expects to run in its own thread.
+--- Causes the map or save area to shrink over time. Expects to run in its own thread.
 --- @param type - shrinking type
 --- @param rate - period between shrinking
 --- @param delay - delay before shrinking
-function ShrinkingThread(type, rate, delay)
+---@param destructionTime - method of destroying units, instantaneous(0) or over time(<0)
+function ShrinkingThread(type, rate, delay, destructionTime)
 
     -- needed for shrinking
     local ScenarioFramework = import("/lua/ScenarioFramework.lua")
     local model = import("/mods/battle-royale/modules/sim/model.lua")
     local nodeController = import("/mods/battle-royale/modules/sim/node-controller.lua")
+    local unitController = import("/mods/battle-royale/modules/sim/unit-controller.lua")
+
     local prng = import("/mods/battle-royale/modules/utils/PseudoRandom.lua").PseudoRandom:OnCreate({1, 2, 3, 4})
 
     -- tell UI about the delay before shrinking
@@ -126,6 +130,11 @@ function ShrinkingThread(type, rate, delay)
 
     -- delay before shrinking starts
     WaitSeconds(delay)
+
+    -- if non-instant destruction of a unit outside the playable area is selected, it will start a separate thread of gradual destruction.
+    if  not (destructionTime == 0) then
+        unitController.DamageOrDestroyStrandedUnits(destructionTime)
+    end
 
     while true do
 
@@ -153,23 +162,27 @@ function ShrinkingThread(type, rate, delay)
 
         -- and shrink!
         model.PlayableArea = table.deepcopy(model.AfterShrink)
-        ScenarioFramework.SetPlayableArea({ x0 = model.PlayableArea[1], y0 = model.PlayableArea[2], x1 = model.PlayableArea[3], y1 = model.PlayableArea[4] }, false)
 
-        -- update!
+        -- reducing the playing area is only needed for the instant destruction mode.
+        if destructionTime == 0 then
+            ScenarioFramework.SetPlayableArea({ x0 = model.PlayableArea[1], y0 = model.PlayableArea[2], x1 = model.PlayableArea[3], y1 = model.PlayableArea[4] }, false)
+            unitController.DestroyStrandedUnits()
+        end
+
         nodeController.UpdateNodes()
-        nodeController.DestroyStrandedUnits()
     end
 end
 
 --- Visualizes the playable area after shrinking.
-function VisualizeShrinking()
-    ForkThread(VisualizeShrinkingThread)
+function VisualizeShrinking(destructionMode)
+    ForkThread(VisualizeShrinkingThread, destructionMode)
 end
 
 --- Visualizes the playable area after shrinking. Expects to run in its own thread.
-function VisualizeShrinkingThread()
+function VisualizeShrinkingThread(destructionMode)
 
-    local color = "ff5555"
+    local nextAreaColor = "ff5555" --red
+    local currentAreaColor = "55ff55" --green
 
     -- upvalue for performance
     local GetTerrainHeight = GetTerrainHeight
@@ -185,21 +198,28 @@ function VisualizeShrinkingThread()
         end
     end
 
-    while true do
-        WaitSeconds(0.1)
-
-        local model = import("/mods/battle-royale/modules/sim/model.lua")
-        local afterShrink = model.AfterShrink
-
-        local p1 = { afterShrink[1], afterShrink[2] }
-        local p2 = { afterShrink[1], afterShrink[4] }
-        local p3 = { afterShrink[3], afterShrink[2] }
-        local p4 = { afterShrink[3], afterShrink[4] }
+    local function DrawArea(area, color)
+        local p1 = { area[1], area[2] }
+        local p2 = { area[1], area[4] }
+        local p3 = { area[3], area[2] }
+        local p4 = { area[3], area[4] }
 
         local n = 64
         DrawDetailedLine(p1, p2, color, n)
         DrawDetailedLine(p1, p3, color, n)
         DrawDetailedLine(p4, p3, color, n)
         DrawDetailedLine(p4, p2, color, n)
+    end
+
+    while true do
+        WaitSeconds(0.1)
+
+        local model = import("/mods/battle-royale/modules/sim/model.lua")
+
+        DrawArea(model.AfterShrink, nextAreaColor)
+
+        if not (destructionMode == 0) then
+            DrawArea(model.PlayableArea, currentAreaColor)
+        end
     end
 end
