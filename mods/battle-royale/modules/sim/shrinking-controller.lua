@@ -227,11 +227,8 @@ function ShrinkingThread(type, rate, delay, destructionTime)
     local model = import("/mods/battle-royale/modules/sim/model.lua")
     local nodeController = import("/mods/battle-royale/modules/sim/node-controller.lua")
     local unitController = import("/mods/battle-royale/modules/sim/unit-controller.lua")
-    local prng = import("/mods/battle-royale/modules/utils/PseudoRandom.lua").PseudoRandom:OnCreate({ 1, 2, 3, 4 })
 
-    local sx0, sy0, sx1, sy1 = unpack(ScenarioInfo.MapData.PlayableRect)
-    local isShrinkDone = false
-
+    local prng = import("/mods/battle-royale/modules/utils/PseudoRandom.lua").PseudoRandom:OnCreate({1, 2, 3, 4})
 
 
     -- tell UI about the delay before shrinking
@@ -241,28 +238,12 @@ function ShrinkingThread(type, rate, delay, destructionTime)
     WaitSeconds(delay)
 
     -- if non-instant destruction of a unit outside the playable area is selected, it will start a separate thread of gradual destruction.
-    if not (destructionTime == 0) then
-        local squareEdgeSize = math.floor((sx1 - sx0) / 40)
-        local xLineSize = math.floor(squareEdgeSize / 3)
-
+    if  not (destructionTime == 0) then
         unitController.DamageOrDestroyStrandedUnits(destructionTime)
-        FillUnplayableArea(squareEdgeSize, xLineSize)
     end
 
-    local function CheckCanPlayableAreaShrink(model)
-        --TODO (15%) possible to make the lobby option
-        local minX = ((sx1 - sx0) / 100) * 15
-        local minY = ((sy1 - sy0) / 100) * 15
+    while true do
 
-        local px0, py0, px1, py1 = unpack(model.AfterShrink)
-
-        local xBool = px1 - px0 > minX
-        local yBool = py1 - py0 > minY
-
-        return xBool and yBool
-    end
-
-    while not isShrinkDone do
 
         if type == "pseudorandom" then
             ShrinkRandomly(prng, model)
@@ -286,20 +267,14 @@ function ShrinkingThread(type, rate, delay, destructionTime)
         -- wait up
         WaitSeconds(rate)
 
-        -- and shrink if it possible!
-        if CheckCanPlayableAreaShrink(model) then
-            model.PlayableArea = table.deepcopy(model.AfterShrink)
-        else
-            model.AfterShrink = table.deepcopy(model.PlayableArea)
-            isShrinkDone = true
-        end
+        -- and shrink!
+        model.PlayableArea = table.deepcopy(model.AfterShrink)
 
         -- reducing the playing area is only needed for the instant destruction mode.
         if destructionTime == 0 then
             ScenarioFramework.SetPlayableArea({ x0 = model.PlayableArea[1], y0 = model.PlayableArea[2], x1 = model.PlayableArea[3], y1 = model.PlayableArea[4] }, false)
             unitController.DestroyStrandedUnits()
         end
-
         nodeController.UpdateNodes()
     end
 end
@@ -310,10 +285,9 @@ function VisualizeShrinking(destructionMode)
 end
 
 --- Visualizes the playable area after shrinking. Expects to run in its own thread.
----@param destructionMode - method of destroying units, instantaneous(0) or over time(<0)
 function VisualizeShrinkingThread(destructionMode)
 
-    local nextAreaColor = "ff9900" --orange
+    local nextAreaColor = "ff5555" --red
     local currentAreaColor = "55ff55" --green
 
     -- upvalue for performance
