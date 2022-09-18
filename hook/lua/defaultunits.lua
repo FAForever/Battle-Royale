@@ -1,11 +1,11 @@
-local oldACU = ACUUnit
+
 local ACUInfo = import('/mods/battle-royale/modules/sim/ACUInfo.lua')
 
+local oldACU = ACUUnit
 ACUUnit = Class(oldACU) {
     OnKilled = function(self, instigator, type, overkillRatio)
-        local selfIndex = self:GetAIBrain():GetArmyIndex()
-        ACUInfo.ACUDeathCoordinates:SetCoords(selfIndex, unpack(self:GetPosition()))
-        ACUInfo.PlayersNicknames:SetNickname(selfIndex, self:GetAIBrain().Nickname)
+        ACUInfo.ACUDeathCoordinates:SetCoords(self.Army, self:GetPositionXYZ())
+        ACUInfo.PlayersNicknames:SetNickname(self.Army, self.Brain.Nickname)
         oldACU.OnKilled(self, instigator, type, overkillRatio)
     end
 }

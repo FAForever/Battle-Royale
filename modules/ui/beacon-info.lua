@@ -2,20 +2,6 @@
 local circleDiameter = 20
 
 
---- Thread that gradually reduces the diameter of the circle that is drawn around the death site of the ACU .
-function DiameterChangeThread()
-
-    while true do
-        WaitSeconds(0.5)
-        if (circleDiameter <= 2) then
-            circleDiameter = 20
-        end
-        circleDiameter = circleDiameter - 2
-    end
-
-end
-
-
 --- Thread that draws a circle around the death of the ACU .
 function DrawCircleThread(position)
 

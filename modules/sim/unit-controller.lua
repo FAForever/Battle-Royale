@@ -71,14 +71,8 @@ function DamageOrDestroyStrandedUnitsThread(destructionTime)
         end
 
         local function DoDamageOrKill(unit)
-            local currentHealth = unit:GetHealth()
             local damage = CalcDamage(unit)
-
-            if currentHealth > damage then
-                unit:SetHealth(unit, currentHealth - damage)
-            else
-                unit:Kill()
-            end
+            unit:OnDamage(nil, damage, {0, 0, 0}, 'OutOfMap')
         end
 
         -- retrieve the brains

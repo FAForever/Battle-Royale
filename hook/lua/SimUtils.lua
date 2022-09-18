@@ -8,12 +8,13 @@ function TransferUnitsOwnership(units, ToArmyIndex, captured)
     local toBrain = GetArmyBrain(ToArmyIndex)
 
     --- change
-    ---The condition is not correctly determined here, which does not allow returning units to the killed player
-    ---and transferring them to another army. Necessary for the mod to work correctly.
+    --- The condition is not correctly determined here, which does not allow returning units to the killed player
+    --- and transferring them to another army. Necessary for the mod to work correctly.
     if not toBrain or (toBrain:IsDefeated() and not TargetArmy) or not units or table.empty(units) then
-    --if not toBrain or toBrain:IsDefeated() or not units or table.empty(units) then
+    -- if not toBrain or toBrain:IsDefeated() or not units or table.empty(units) then
         return
     end
+
     local fromBrain = GetArmyBrain(units[1].Army)
     local shareUpgrades
 

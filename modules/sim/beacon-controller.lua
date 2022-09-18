@@ -128,12 +128,10 @@ function CreateCommanderBeacon(selfIndex, units, xPos, yPos, zPos)
 
 
     local DrawCircleThread = import("/mods/battle-royale/modules/ui/beacon-info.lua").DrawCircleThread
-    local DiameterChangeThread = import("/mods/battle-royale/modules/ui/beacon-info.lua").DiameterChangeThread
 
 
     -- threads that draw a circle around the place of death of the commander
     local circleThread = ForkThread(DrawCircleThread, ACUInfo.ACUDeathCoordinates:GetCoords(selfIndex))
-    local diameterThread = ForkThread(DiameterChangeThread)
 
     -- makes beacon invulnerable for 4 seconds.
     beacon:SetCanTakeDamage(false)
@@ -157,7 +155,6 @@ function CreateCommanderBeacon(selfIndex, units, xPos, yPos, zPos)
         end
 
         KillThread(circleThread)
-        KillThread(diameterThread)
         beacon = nil
     end
 
@@ -170,7 +167,6 @@ function CreateCommanderBeacon(selfIndex, units, xPos, yPos, zPos)
         end
 
         KillThread(circleThread)
-        KillThread(diameterThread)
         beacon = nil
     end
 
@@ -183,7 +179,6 @@ function CreateCommanderBeacon(selfIndex, units, xPos, yPos, zPos)
         TransferUnitsOwnership(units, new.Army)
 
         KillThread(circleThread)
-        KillThread(diameterThread)
         beacon = nil
     end
 
