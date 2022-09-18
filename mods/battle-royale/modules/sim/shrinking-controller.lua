@@ -22,7 +22,6 @@ function getDirectionBySideNumber (sideNumber)
     return sideNumber > 2 and -1 or 1
 end
 
-
 --- Returns the map size depending on what side we're shrinking
 --- @param sideNumber - side number, must be from 1 to 4
 function getSizeBySideNumber (sideNumber)
@@ -32,7 +31,6 @@ function getSizeBySideNumber (sideNumber)
     end
     return size
 end
-
 
 --- At first calling returns random side number.
 --- Depending on direction of shrinking (clockwise or counterclockwise) returns
@@ -101,33 +99,170 @@ function SyncToUI(isDelayed, currentArea, nextArea, interval)
     Sync.BattleRoyale.Shrink.Interval = interval
 end
 
---- Causes the map to shrink over time.
---- @param type - shrinking type
---- @param rate - period between shrinking
---- @param delay - delay before shrinking
-function Shrinking(type, rate, delay)
-    ForkThread(ShrinkingThread, type, rate, delay)
+--- Function that starts a thread that fills the non-playable area with X symbols
+function FillUnplayableArea(squareEdgeSize, xLineSize)
+    ForkThread(FillUnplayableAreaThread, squareEdgeSize, xLineSize)
 end
 
---- Causes the map to shrink over time. Expects to run in its own thread.
+--- Fills the unplayable area with X symbols.
+--- The size of the X symbol depends on xLineSize, and the distance between the X symbols depends on squareEdgeSize
+function FillUnplayableAreaThread(squareEdgeSize, xLineSize)
+
+    local model = import("/mods/battle-royale/modules/sim/model.lua")
+    local GetTerrainHeight = GetTerrainHeight
+
+    local currentArea = table.deepcopy(model.PlayableArea) -- needed to track if model.PlayableArea has changed
+    local sx0, sy0, sx1, sy1 = unpack(ScenarioInfo.MapData.PlayableRect)
+    local msnps = math.floor((sx1 - sx0) / squareEdgeSize) -- maximum squares number per side.
+
+
+    local function Equals(area1, area2)
+        return area1[1] == area2[1]
+                and area1[2] == area2[2]
+                and area1[3] == area2[3]
+                and area1[4] == area2[4]
+    end
+
+    --- Finds the points that are the center of the X symbol.
+    local function FindPoints(playableArea)
+
+        local points = {}
+        local x = sx0
+        local y = sy0
+        local edgeSize = sx1 / msnps
+
+        --- Checks if any part of the X character is in the area.
+        local function InsideArea(area, x, y, size)
+
+            local function InsideRectangle(rectangle, x, y)
+                local xBool = rectangle[1] < x and x < rectangle[3]
+                local yBool = rectangle[2] < y and y < rectangle[4]
+                return xBool and yBool
+            end
+
+            local topLeft = InsideRectangle(area, x - size, y - size)
+            local topRight = InsideRectangle(area, x + size, y - size)
+
+            local bottomRight = InsideRectangle(area, x + size, y + size)
+            local bottomLeft = InsideRectangle(area, x - size, y + size)
+
+            return topLeft or topRight or bottomRight or bottomLeft
+        end
+
+        for k = 0, msnps - 1 do
+
+            if x < sx1 then
+                x = edgeSize / 2 + edgeSize * k
+            else
+                x = edgeSize / 2
+            end
+
+            for l = 0, msnps - 1 do
+                if y < sy1 then
+                    y = edgeSize / 2 + edgeSize * l
+                else
+                    y = edgeSize / 2
+                end
+
+                local notInPlayable = not InsideArea(playableArea, x, y, edgeSize / 2)
+
+                if notInPlayable then
+                    table.insert(points, { x = x, y = y })
+                end
+            end
+
+        end
+
+        return points
+    end
+
+    local function DrawX(point, size)
+        local color = "ff5555" --red
+
+        local topLeft = { point.x - size, GetTerrainHeight(point.x - size, point.y - size), point.y - size }
+        local bottomRight = { point.x + size, GetTerrainHeight(point.x - size, point.y + size), point.y + size }
+
+        local topRight = { point.x + size, GetTerrainHeight(point.x + size, point.y - size), point.y - size }
+        local bottomLeft = { point.x - size, GetTerrainHeight(point.x - size, point.y + size), point.y + size }
+
+        DrawLine(topLeft, bottomRight, color)
+        DrawLine(topRight, bottomLeft, color)
+    end
+
+    local points = {}
+
+    while true do
+        WaitSeconds(0.1)
+        local model = import("/mods/battle-royale/modules/sim/model.lua")
+
+        if not Equals(currentArea, model.PlayableArea) then
+            currentArea = table.deepcopy(model.PlayableArea)
+            points = FindPoints(model.PlayableArea)
+        end
+
+        for _, point in points do
+            DrawX(point, xLineSize)
+        end
+    end
+end
+
+--- Causes the map or save area to shrink over time.
 --- @param type - shrinking type
 --- @param rate - period between shrinking
 --- @param delay - delay before shrinking
-function ShrinkingThread(type, rate, delay)
+--- @param destructionTime - method of destroying units, instantaneous(0) or over time(<0)
+function Shrinking(type, rate, delay, destructionTime)
+    ForkThread(ShrinkingThread, type, rate, delay, destructionTime)
+end
+
+--- Causes the map or save area to shrink over time. Expects to run in its own thread.
+--- @param type - shrinking type
+--- @param rate - period between shrinking
+--- @param delay - delay before shrinking
+---@param destructionTime - method of destroying units, instantaneous(0) or over time(<0)
+function ShrinkingThread(type, rate, delay, destructionTime)
 
     -- needed for shrinking
     local ScenarioFramework = import("/lua/ScenarioFramework.lua")
     local model = import("/mods/battle-royale/modules/sim/model.lua")
     local nodeController = import("/mods/battle-royale/modules/sim/node-controller.lua")
-    local prng = import("/mods/battle-royale/modules/utils/PseudoRandom.lua").PseudoRandom:OnCreate({1, 2, 3, 4})
+    local unitController = import("/mods/battle-royale/modules/sim/unit-controller.lua")
+    local prng = import("/mods/battle-royale/modules/utils/PseudoRandom.lua").PseudoRandom:OnCreate({ 1, 2, 3, 4 })
+
+    local sx0, sy0, sx1, sy1 = unpack(ScenarioInfo.MapData.PlayableRect)
+    local isShrinkDone = false
+
+
 
     -- tell UI about the delay before shrinking
-    SyncToUI( true, model.PlayableArea, model.PlayableArea, delay)
+    SyncToUI(true, model.PlayableArea, model.PlayableArea, delay)
 
     -- delay before shrinking starts
     WaitSeconds(delay)
 
-    while true do
+    -- if non-instant destruction of a unit outside the playable area is selected, it will start a separate thread of gradual destruction.
+    if not (destructionTime == 0) then
+        local squareEdgeSize = math.floor((sx1 - sx0) / 40)
+        local xLineSize = math.floor(squareEdgeSize / 3)
+
+        unitController.DamageOrDestroyStrandedUnits(destructionTime)
+        FillUnplayableArea(squareEdgeSize, xLineSize)
+    end
+
+    local function CheckCanPlayableAreaShrink(model)
+        --TODO (15%) possible to make the lobby option
+        local minX = ((sx1 - sx0) / 100) * 15
+        local minY = ((sy1 - sy0) / 100) * 15
+
+        local px0, py0, px1, py1 = unpack(model.AfterShrink)
+
+        local xBool = px1 - px0 > minX
+        local yBool = py1 - py0 > minY
+
+        return xBool and yBool
+    end
+
+    while not isShrinkDone do
 
         if type == "pseudorandom" then
             ShrinkRandomly(prng, model)
@@ -146,36 +281,46 @@ function ShrinkingThread(type, rate, delay)
         end
 
         -- tell  UI of the next playable area.
-        SyncToUI( false, model.PlayableArea, model.PlayableArea, rate)
+        SyncToUI(false, model.PlayableArea, model.PlayableArea, rate)
 
         -- wait up
         WaitSeconds(rate)
 
-        -- and shrink!
-        model.PlayableArea = table.deepcopy(model.AfterShrink)
-        ScenarioFramework.SetPlayableArea({ x0 = model.PlayableArea[1], y0 = model.PlayableArea[2], x1 = model.PlayableArea[3], y1 = model.PlayableArea[4] }, false)
+        -- and shrink if it possible!
+        if CheckCanPlayableAreaShrink(model) then
+            model.PlayableArea = table.deepcopy(model.AfterShrink)
+        else
+            model.AfterShrink = table.deepcopy(model.PlayableArea)
+            isShrinkDone = true
+        end
 
-        -- update!
+        -- reducing the playing area is only needed for the instant destruction mode.
+        if destructionTime == 0 then
+            ScenarioFramework.SetPlayableArea({ x0 = model.PlayableArea[1], y0 = model.PlayableArea[2], x1 = model.PlayableArea[3], y1 = model.PlayableArea[4] }, false)
+            unitController.DestroyStrandedUnits()
+        end
+
         nodeController.UpdateNodes()
-        nodeController.DestroyStrandedUnits()
     end
 end
 
 --- Visualizes the playable area after shrinking.
-function VisualizeShrinking()
-    ForkThread(VisualizeShrinkingThread)
+function VisualizeShrinking(destructionMode)
+    ForkThread(VisualizeShrinkingThread, destructionMode)
 end
 
 --- Visualizes the playable area after shrinking. Expects to run in its own thread.
-function VisualizeShrinkingThread()
+---@param destructionMode - method of destroying units, instantaneous(0) or over time(<0)
+function VisualizeShrinkingThread(destructionMode)
 
-    local color = "ff5555"
+    local nextAreaColor = "ff9900" --orange
+    local currentAreaColor = "55ff55" --green
 
     -- upvalue for performance
     local GetTerrainHeight = GetTerrainHeight
 
     local function DrawDetailedLine(p1, p2, color, n)
-        local prev = {p1[1], GetTerrainHeight(p1[1], p1[2]), p1[2]}
+        local prev = { p1[1], GetTerrainHeight(p1[1], p1[2]), p1[2] }
         for k = 1, n do
             local factor = (k / n)
             local next = { (1 - factor) * p1[1] + factor * p2[1], 0, (1 - factor) * p1[2] + factor * p2[2] }
@@ -185,21 +330,28 @@ function VisualizeShrinkingThread()
         end
     end
 
-    while true do
-        WaitSeconds(0.1)
-
-        local model = import("/mods/battle-royale/modules/sim/model.lua")
-        local afterShrink = model.AfterShrink
-
-        local p1 = { afterShrink[1], afterShrink[2] }
-        local p2 = { afterShrink[1], afterShrink[4] }
-        local p3 = { afterShrink[3], afterShrink[2] }
-        local p4 = { afterShrink[3], afterShrink[4] }
+    local function DrawArea(area, color)
+        local p1 = { area[1], area[2] }
+        local p2 = { area[1], area[4] }
+        local p3 = { area[3], area[2] }
+        local p4 = { area[3], area[4] }
 
         local n = 64
         DrawDetailedLine(p1, p2, color, n)
         DrawDetailedLine(p1, p3, color, n)
         DrawDetailedLine(p4, p3, color, n)
         DrawDetailedLine(p4, p2, color, n)
+    end
+
+    while true do
+        WaitSeconds(0.1)
+
+        local model = import("/mods/battle-royale/modules/sim/model.lua")
+
+        DrawArea(model.AfterShrink, nextAreaColor)
+
+        if not (destructionMode == 0) then
+            DrawArea(model.PlayableArea, currentAreaColor)
+        end
     end
 end

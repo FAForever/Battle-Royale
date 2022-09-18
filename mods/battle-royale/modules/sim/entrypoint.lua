@@ -31,8 +31,7 @@ function Entrypoint()
     end
 
     -- initialize shrinking
-
-    shrinkingController.Shrinking(ScenarioInfo.Options.ShrinkingType, ScenarioInfo.Options.ShrinkingRate, ScenarioInfo.Options.ShrinkingDelay)
-    shrinkingController.VisualizeShrinking()
+    shrinkingController.Shrinking(ScenarioInfo.Options.ShrinkingType, ScenarioInfo.Options.ShrinkingRate, ScenarioInfo.Options.ShrinkingDelay, ScenarioInfo.Options.DestructionMode)
+    shrinkingController.VisualizeShrinking(ScenarioInfo.Options.DestructionMode)
 
 end
