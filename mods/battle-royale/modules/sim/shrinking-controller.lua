@@ -22,7 +22,6 @@ function getDirectionBySideNumber (sideNumber)
     return sideNumber > 2 and -1 or 1
 end
 
-
 --- Returns the map size depending on what side we're shrinking
 --- @param sideNumber - side number, must be from 1 to 4
 function getSizeBySideNumber (sideNumber)
@@ -32,7 +31,6 @@ function getSizeBySideNumber (sideNumber)
     end
     return size
 end
-
 
 --- At first calling returns random side number.
 --- Depending on direction of shrinking (clockwise or counterclockwise) returns
@@ -101,6 +99,113 @@ function SyncToUI(isDelayed, currentArea, nextArea, interval)
     Sync.BattleRoyale.Shrink.Interval = interval
 end
 
+--- Function that starts a thread that fills the non-playable area with X symbols
+function FillUnplayableArea(squareEdgeSize, xLineSize)
+    ForkThread(FillUnplayableAreaThread, squareEdgeSize, xLineSize)
+end
+
+--- Fills the unplayable area with X symbols.
+--- The size of the X symbol depends on xLineSize, and the distance between the X symbols depends on squareEdgeSize
+function FillUnplayableAreaThread(squareEdgeSize, xLineSize)
+
+    local model = import("/mods/battle-royale/modules/sim/model.lua")
+    local GetTerrainHeight = GetTerrainHeight
+
+    local currentArea = table.deepcopy(model.PlayableArea) -- needed to track if model.PlayableArea has changed
+    local sx0, sy0, sx1, sy1 = unpack(ScenarioInfo.MapData.PlayableRect)
+    local msnps = math.floor((sx1 - sx0) / squareEdgeSize) -- maximum squares number per side.
+
+
+    local function Equals(area1, area2)
+        return area1[1] == area2[1]
+                and area1[2] == area2[2]
+                and area1[3] == area2[3]
+                and area1[4] == area2[4]
+    end
+
+    --- Finds the points that are the center of the X symbol.
+    local function FindPoints(playableArea)
+
+        local points = {}
+        local x = sx0
+        local y = sy0
+        local edgeSize = sx1 / msnps
+
+        --- Checks if any part of the X character is in the area.
+        local function InsideArea(area, x, y, size)
+
+            local function InsideRectangle(rectangle, x, y)
+                local xBool = rectangle[1] < x and x < rectangle[3]
+                local yBool = rectangle[2] < y and y < rectangle[4]
+                return xBool and yBool
+            end
+
+            local topLeft = InsideRectangle(area, x - size, y - size)
+            local topRight = InsideRectangle(area, x + size, y - size)
+
+            local bottomRight = InsideRectangle(area, x + size, y + size)
+            local bottomLeft = InsideRectangle(area, x - size, y + size)
+
+            return topLeft or topRight or bottomRight or bottomLeft
+        end
+
+        for k = 0, msnps - 1 do
+
+            if x < sx1 then
+                x = edgeSize / 2 + edgeSize * k
+            else
+                x = edgeSize / 2
+            end
+
+            for l = 0, msnps - 1 do
+                if y < sy1 then
+                    y = edgeSize / 2 + edgeSize * l
+                else
+                    y = edgeSize / 2
+                end
+
+                local notInPlayable = not InsideArea(playableArea, x, y, edgeSize / 2)
+
+                if notInPlayable then
+                    table.insert(points, { x = x, y = y })
+                end
+            end
+
+        end
+
+        return points
+    end
+
+    local function DrawX(point, size)
+        local color = "ff5555" --red
+
+        local topLeft = { point.x - size, GetTerrainHeight(point.x - size, point.y - size), point.y - size }
+        local bottomRight = { point.x + size, GetTerrainHeight(point.x - size, point.y + size), point.y + size }
+
+        local topRight = { point.x + size, GetTerrainHeight(point.x + size, point.y - size), point.y - size }
+        local bottomLeft = { point.x - size, GetTerrainHeight(point.x - size, point.y + size), point.y + size }
+
+        DrawLine(topLeft, bottomRight, color)
+        DrawLine(topRight, bottomLeft, color)
+    end
+
+    local points = {}
+
+    while true do
+        WaitSeconds(0.1)
+        local model = import("/mods/battle-royale/modules/sim/model.lua")
+
+        if not Equals(currentArea, model.PlayableArea) then
+            currentArea = table.deepcopy(model.PlayableArea)
+            points = FindPoints(model.PlayableArea)
+        end
+
+        for _, point in points do
+            DrawX(point, xLineSize)
+        end
+    end
+end
+
 --- Causes the map or save area to shrink over time.
 --- @param type - shrinking type
 --- @param rate - period between shrinking
@@ -125,8 +230,9 @@ function ShrinkingThread(type, rate, delay, destructionTime)
 
     local prng = import("/mods/battle-royale/modules/utils/PseudoRandom.lua").PseudoRandom:OnCreate({1, 2, 3, 4})
 
+
     -- tell UI about the delay before shrinking
-    SyncToUI( true, model.PlayableArea, model.PlayableArea, delay)
+    SyncToUI(true, model.PlayableArea, model.PlayableArea, delay)
 
     -- delay before shrinking starts
     WaitSeconds(delay)
@@ -137,6 +243,7 @@ function ShrinkingThread(type, rate, delay, destructionTime)
     end
 
     while true do
+
 
         if type == "pseudorandom" then
             ShrinkRandomly(prng, model)
@@ -155,7 +262,7 @@ function ShrinkingThread(type, rate, delay, destructionTime)
         end
 
         -- tell  UI of the next playable area.
-        SyncToUI( false, model.PlayableArea, model.PlayableArea, rate)
+        SyncToUI(false, model.PlayableArea, model.PlayableArea, rate)
 
         -- wait up
         WaitSeconds(rate)
@@ -168,7 +275,6 @@ function ShrinkingThread(type, rate, delay, destructionTime)
             ScenarioFramework.SetPlayableArea({ x0 = model.PlayableArea[1], y0 = model.PlayableArea[2], x1 = model.PlayableArea[3], y1 = model.PlayableArea[4] }, false)
             unitController.DestroyStrandedUnits()
         end
-
         nodeController.UpdateNodes()
     end
 end
@@ -188,7 +294,7 @@ function VisualizeShrinkingThread(destructionMode)
     local GetTerrainHeight = GetTerrainHeight
 
     local function DrawDetailedLine(p1, p2, color, n)
-        local prev = {p1[1], GetTerrainHeight(p1[1], p1[2]), p1[2]}
+        local prev = { p1[1], GetTerrainHeight(p1[1], p1[2]), p1[2] }
         for k = 1, n do
             local factor = (k / n)
             local next = { (1 - factor) * p1[1] + factor * p2[1], 0, (1 - factor) * p1[2] + factor * p2[2] }
