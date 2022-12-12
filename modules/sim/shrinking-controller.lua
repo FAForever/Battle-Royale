@@ -131,7 +131,7 @@ function FillUnplayableAreaThread(squareEdgeSize, xLineSize)
         local y = sy0
         local edgeSize = sx1 / msnps
 
-        --- Checks if any part of the X character is in the area.
+        --- Checks if any part of the X symbol is in the area.
         local function InsideArea(area, x, y, size)
 
             local function InsideRectangle(rectangle, x, y)
