@@ -1,4 +1,3 @@
-
 AIOpts = {
 
     {
@@ -246,6 +245,52 @@ AIOpts = {
                 text = "<LOC br_regen_values_consider_text>Consider",
                 help = "<LOC br_regen_values_consider_help>Health regeneration will reduce damage from non-playable area. Cybran's SACUs with a regen upgrade may not take any damage from the non-playable zone at all.",
                 key = 0,
+            },
+        },
+    },
+    {
+        default = 1,
+        label = "<LOC br_sacu_spawn>Sacu spawn",
+        help = "",
+        key = "SacuSpawn",
+        values = {
+            {
+                text = "Yes",
+                help = "",
+                key = 1,
+            },
+            {
+                text = "No",
+                help = "",
+                key = 0,
+            },
+        },
+    },
+    {
+        default = 2,
+        label = "<LOC br_naval_exps>Naval exps",
+        help = "",
+        key = "NavalExps",
+        values = {
+            {
+                text = "Only naval",
+                help = "",
+                key = "only_naval",
+            },
+            {
+                text = "Fifty fifty",
+                help = "",
+                key = "fifty_fifty",
+            },
+            {
+                text = "More naval",
+                help = "",
+                key = "more_naval",
+            },
+            {
+                text = "More other",
+                help = "",
+                key = "more_other",
             },
         },
     },
