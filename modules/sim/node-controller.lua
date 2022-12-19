@@ -10,7 +10,7 @@ local CarePackageTeleportIn = EffectTemplates.UnitTeleport01
 local CarePackageDestroyed = table.concatenate(EffectTemplates.CommanderQuantumGateInEnergy, EffectTemplates.AGravitonBolterHit01)
 local CarePackageOnWater = EffectTemplates.DefaultSeaUnitBackWake01
 local ProblematicUnits = import("/mods/battle-royale/modules/packer/units-problematic.lua").UnitTable
-local SacuWithExperimentals = ScenarioInfo.Options.SacuSpawn
+local SACUWithExperimental = ScenarioInfo.Options.SacuSpawn
 local NavalExps = ScenarioInfo.Options.NavalExps
 local ExpsCounter = 0
 
@@ -225,7 +225,8 @@ function GetRandomBlueprints(entries, count)
     for k = 1, count do
         local bpId = entries[math.floor(Random() * table.getn(entries)) + 1]
 
-        if SacuWithExperimentals == 1 then
+        --if sacu spawning is enabled in the lobby, add the id of a random sacu to the list
+        if SACUWithExperimental == 1 then
             local bp = __blueprints[bpId:lower()]
             local isExperimental = bp.General.Category == 'Experimental' or bp.General.TechLevel == 'RULEUTL_Experimental'
 
@@ -243,6 +244,8 @@ function GetRandomBlueprints(entries, count)
     return rngs
 end
 
+--- Based on the option for spawning naval experimental units defined in the lobby,
+--- returns the currently required type of experimental unit (naval or land / air)
 function GetCertainEntryType()
 
     local function GetAirOrLand()
