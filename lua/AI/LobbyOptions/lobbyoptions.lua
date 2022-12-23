@@ -125,6 +125,34 @@ AIOpts = {
     },
     {
         default = 2,
+        label = "<LOC br_beacon_tech_level_label>Com beacon tech level",
+        help = "<LOC br_beacon_tech_level_help>Determines the beacon of what tech level will appear after the death of the commander. The higher the mass cost of the killed player's units, the higher the tech level of the beacon, but the beacon capture time and the cost of capture in energy also increase with the  tech level.",
+        key = "BeaconTechLevel",
+        values = {
+            {
+                text = "<LOC br_beacon_tech_level_values_low_text>Low",
+                help = "<LOC br_beacon_tech_level_values_low_help>Commander beacon levels: t1 - if the cost of units in the mass was up to 20к, t2 - from 20k to 80k, t3 - from 80k and above",
+                key = 0.75,
+            },
+            {
+                text = "<LOC br_beacon_tech_level_values_normal_text>Normal",
+                help = "<LOC br_beacon_tech_level_values_normal_help>Commander beacon levels: t1 - if the cost of units in the mass was up to 30к, t2 - from 30k to 100k, t3 - from 100k and above",
+                key = 1,
+            },
+            {
+                text = "<LOC br_beacon_tech_level_values_high_text>High",
+                help = "<LOC br_beacon_tech_level_values_high_help>Commander beacon levels: t1 - if the cost of units in the mass was up to 42к, t2 - from 42k to 120k, t3 - from 120k and above",
+                key = 1.25,
+            },
+            {
+                text = "<LOC br_beacon_tech_level_values_very_high_text>Very high",
+                help = "<LOC br_beacon_tech_level_values_very_high_help>Commander beacon levels: t1 - if the cost of units in the mass was up to 60к, t2 - from 60k to 150k, t3 - from 150k and above",
+                key = 1.5,
+            },
+        },
+    },
+    {
+        default = 2,
         label = "<LOC br_packages_curve_label>Care packages curve",
         help = "<LOC br_packages_curve_help>Determines how quickly care packages become more worth in tech..",
         key = 'CarePackagesCurve',

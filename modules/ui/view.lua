@@ -35,44 +35,6 @@ function showText(window, text, maxStringLength)
     end
 end
 
---- Displays information about the commander's beacon - the transition time to the t2 and t3 stages
---- and information about the cost of capturing.
---- @param window - window object in which you want to display the text.
-function displayBeaconInfo(window)
-    local time = GameTime()
-    local model = import("/mods/battle-royale/modules/ui/model.lua")
-
-    local function generateCaptureText()
-        local stage = time > model.Beacon.T3StageTime and 'T3' or time > model.Beacon.T2StageTime and 'T2' or 'T1'
-        local bp = stage == 'T3' and 100 or stage == 'T2' and 42 or 10     -- bp - build power
-        local beaconId = stage == 'T3' and 'xsc1301' or stage == 'T2' and 'xsc1501' or 'uac1301'
-        local beacon  = __blueprints[beaconId]
-        local ct = beacon.Economy.BuildTime / (bp * 2) -- ct - capture time
-        local eps = beacon.Economy.BuildCostEnergy / ct -- eps - energy per second
-        local result = LOC("<LOC br_ui_beacon_info>%s commander (%s bp) will capture in %s seconds spending %s energy per second.")
-        return result:format(stage, bp, ct, eps)
-    end
-
-    window:Text(LOC("<LOC br_ui_commander_beacon>Commanders beacon"))
-    window:Divider()
-
-    if time > model.Beacon.T2StageTime and time < model.Beacon.T3StageTime then
-        local text = LOC("<LOC br_ui_conversion_time>Time until commander's beacon conversion at %s stage: ")
-        local t3StageTime = model.Beacon.T3StageTime - model.Beacon.T2StageTime
-        local curr = time - model.Beacon.T2StageTime
-        window:TextWithLabel(text:format('T3'), tostring(math.floor( t3StageTime - curr + 0.5) ), percentage)
-        window:ProgressBar("beacon-progress", curr, t3StageTime)
-    end
-    if time < model.Beacon.T2StageTime then
-        local text = LOC("<LOC br_ui_conversion_time>Time until commander's beacon conversion at %s stage: ")
-        window:TextWithLabel(text:format('T2'), tostring(math.floor( model.Beacon.T2StageTime - time + 0.5) ), percentage)
-        window:ProgressBar("beacon-progress", time, model.Beacon.T2StageTime)
-    end
-
-    showText(window, generateCaptureText(), 55)
-    window:Space()
-end
-
 function CreateInterface(window, isReplay)
 
     local model = import("/mods/battle-royale/modules/ui/model.lua")
@@ -117,10 +79,6 @@ function CreateInterface(window, isReplay)
             window:ProgressBar("shrink-progress", curr, model.Shrink.Interval)
 
             window:Space()
-
-            displayBeaconInfo(window)
-
-
 
             -- construct shapes of next off areas
             local shapes = { }

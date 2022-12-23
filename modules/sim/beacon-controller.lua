@@ -7,35 +7,31 @@ local CarePackageTeleportIn = EffectTemplates.UnitTeleport01
 local CarePackageDestroyed = table.concatenate(EffectTemplates.CommanderQuantumGateInEnergy, EffectTemplates.AGravitonBolterHit01)
 
 --if multiplier = 0.75
-local T2StageTime = 1020 -- 17 minute
-local T3StageTime = 1920 -- 32 minute
-local Multiplier = ScenarioInfo.Options.CarePackagesCurve
+local T2Stage = 20000
+local T3Stage = 80000
+local Multiplier = ScenarioInfo.Options.BeaconTechLevel
 
---- Initializes the time at which the commander's beacon will enter the t2 and t3 stages and sync ui.
---- Depends on the CarePackagesCurve parameter defined in the lobby.
-function InitStageTimeAndSyncUI()
+--- Determines the cost of the units of the killed commander in the mass,
+--- which is necessary to increase the tech level of the commander's beacon.
+--- Depends on the BeaconTechLevel parameter defined in the lobby.
+function InitStageCost()
     if Multiplier == 1.0 then
-        T2StageTime = 900 -- 15 minute
-        T3StageTime = 1620 -- 27 minute
+        T2Stage = 30000
+        T3Stage = 100000
     end
 
     if Multiplier == 1.25 then
-        T2StageTime = 720 --12 minute
-        T3StageTime = 1320 -- 22 minute
+        T2Stage = 42000
+        T3Stage = 120000
     end
 
     if Multiplier == 1.5 then
-        T2StageTime = 540 -- 9 minute
-        T3StageTime = 1020 -- 17 minute
+        T2Stage = 60000
+        T3Stage = 150000
     end
-
-    Sync.BattleRoyale = Sync.BattleRoyale or { }
-    Sync.BattleRoyale.Beacon = { }
-    Sync.BattleRoyale.Beacon.T2StageTime = T2StageTime
-    Sync.BattleRoyale.Beacon.T3StageTime = T3StageTime
 end
 
-InitStageTimeAndSyncUI()
+InitStageCost()
 
 --- Returns the number of units and the total cost in mass
 function GetUnitsData(units)
@@ -81,16 +77,16 @@ function CreateVisibleSpots(selfIndex, x, z)
 
 end
 
---- Depending on the time elapsed in the game, returns the id t1, t2 or t3 of the commander's beacon.
-function DefineBeaconId()
+--- Depending on the amount of mass defined in the lobby, it will return the id t1, t2 or t3 of the command beacon.
+--- @param massCost - total cost of units in mass
+function DefineBeaconId(massCost)
     local result = 'uac1301'
-    local inGameTime = GetGameTimeSeconds()
 
-    if inGameTime > T2StageTime and inGameTime < T3StageTime then
+    if massCost > T2Stage and massCost < T3Stage then
         result = 'xsc1501'
     end
 
-    if inGameTime > T3StageTime then
+    if massCost > T3Stage then
         result = 'xsc1301'
     end
 
@@ -116,7 +112,7 @@ function CreateCommanderBeacon(selfIndex, units, xPos, yPos, zPos)
         return
     end
 
-    local beaconId = DefineBeaconId()
+    local beaconId = DefineBeaconId(unitsData.totalMassCost)
     local beacon = CreateUnitHPR(beaconId, "NEUTRAL_CIVILIAN", xPos, yPos, zPos, 0, 0, 0)
     local nickname = unpack(ACUInfo.PlayersNicknames:GetNickname(selfIndex))
 
