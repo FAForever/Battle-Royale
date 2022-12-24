@@ -1,4 +1,3 @@
-
 local conversion = import("/mods/dear-windowing/modules/conversion.lua")
 
 local percentage = 0.9
@@ -35,6 +34,36 @@ function showText(window, text, maxStringLength)
     end
 end
 
+--function ChangeFillingDangerArea(window, model)
+--    local enable = LOC("<LOC br_ui_filling_enable>Enable")
+--    local disable = LOC("<LOC br_ui_filling_disable>Disable")
+--    local header = LOC("<LOC br_ui_filling_header>Filling unplayable area")
+--    local xSize = LOC("<LOC br_ui_filling_x_size>Resize X")
+--
+--    window:Text(header)
+--    window:Divider()
+--
+--    local buttonLabel = model.Shrink.Filled and disable or enable
+--
+--    if window:Button(buttonLabel) then
+--        Sync.BattleRoyale = Sync.BattleRoyale or { }
+--        Sync.BattleRoyale.Shrink = { }
+--
+--        model.Shrink.Filled = not (model.Shrink.Filled)
+--        Sync.BattleRoyale.Shrink.Filled = model.Shrink.Filled
+--    end
+--
+--    if window:Button(xSize) then
+--        Sync.BattleRoyale = Sync.BattleRoyale or { }
+--        Sync.BattleRoyale.Shrink = { }
+--
+--        model.Shrink.XSize = model.Shrink.XSize <= 2 and 9 or model.Shrink.XSize - 1
+--        Sync.BattleRoyale.Shrink.XSize = model.Shrink.XSize
+--    end
+--
+--    window:Space()
+--end
+
 function CreateInterface(window, isReplay)
 
     local model = import("/mods/battle-royale/modules/ui/model.lua")
@@ -50,92 +79,95 @@ function CreateInterface(window, isReplay)
 
     window:Space()
 
-    window:BeginTabBar("main-tab-bar", { battleRoyale, help } )
+    window:BeginTabBar("main-tab-bar", { battleRoyale, help })
 
     window:Space()
 
-        if window:BeginTab(battleRoyale) then
+    if window:BeginTab(battleRoyale) then
 
-            if model.Config.CarePackages then 
-                window:Text(LOC("<LOC br_ui_care_packages>Care packages"))
-                window:Divider()
-
-                local curr = time - model.CarePackage.Timestamp
-                window:TextWithLabel(LOC("<LOC br_ui_care_packages_time>Time remaning until next package: "), tostring(math.floor( model.CarePackage.Interval - curr + 0.5) ), percentage)
-                window:ProgressBar("care-package-progress", curr, model.CarePackage.Interval)
-                window:Space()
-            end
-
-            window:Text(LOC("<LOC br_ui_shrinking>Shrinking"))
+        if model.Config.CarePackages then
+            window:Text(LOC("<LOC br_ui_care_packages>Care packages"))
             window:Divider()
 
-            local curr = time - model.Shrink.Timestamp
-            if model.Shrink.Delayed then 
-                window:TextWithLabel(LOC("<LOC br_ui_shrinking_start>Time remaning until shrinking starts: "), tostring(math.floor(model.Shrink.Interval - curr + 0.5) ), percentage)
-            else 
-                window:TextWithLabel(LOC("<LOC br_ui_shrinking_next>Time remaning until next shrink: "), tostring(math.floor(model.Shrink.Interval - curr + 0.5) ), percentage)
-            end
-
-            window:ProgressBar("shrink-progress", curr, model.Shrink.Interval)
-
+            local curr = time - model.CarePackage.Timestamp
+            window:TextWithLabel(LOC("<LOC br_ui_care_packages_time>Time remaning until next package: "), tostring(math.floor(model.CarePackage.Interval - curr + 0.5)), percentage)
+            window:ProgressBar("care-package-progress", curr, model.CarePackage.Interval)
             window:Space()
-
-            -- construct shapes of next off areas
-            local shapes = { }
-            if model.Shrink.NextOffAreas then 
-                for k, area in model.Shrink.NextOffAreas do 
-                    table.insert(shapes, { X = area.x0, Y = area.y0, Width = area.x1 - area.x0, Height = area.y1 - area.y0, Solid = true, Color = "44aa0000" })
-                end
-            end
-
-            -- construct shapes of actual off areas
-            if model.Shrink.OffAreas then 
-                for k, area in model.Shrink.OffAreas do 
-                    table.insert(shapes, { X = area.x0, Y = area.y0, Width = area.x1 - area.x0, Height = area.y1 - area.y0, Solid = true, Color = "44000000" })
-                end
-            end
-
-            -- construct shape for care package
-            if model.Config.CarePackages then 
-                if model.CarePackage.Coordinates then 
-                    local coords = model.CarePackage.Coordinates
-                    table.insert(shapes, { X = (coords[1] / model.Config.Size[1]) - 0.02, Y = (coords[3] / model.Config.Size[2]) - 0.02, Width = 0.04, Height = 0.04, Solid = false, Color = "9900ffff"})
-                end
-            end
-
-            window:MapPreview("map", model.Config.Map, shapes)
         end
 
-        if window:BeginTab(help) then
+        window:Text(LOC("<LOC br_ui_shrinking>Shrinking"))
+        window:Divider()
 
-            window:BeginList("help-list", 640)
+        local curr = time - model.Shrink.Timestamp
+        if model.Shrink.Delayed then
+            window:TextWithLabel(LOC("<LOC br_ui_shrinking_start>Time remaning until shrinking starts: "), tostring(math.floor(model.Shrink.Interval - curr + 0.5)), percentage)
+        else
+            window:TextWithLabel(LOC("<LOC br_ui_shrinking_next>Time remaning until next shrink: "), tostring(math.floor(model.Shrink.Interval - curr + 0.5)), percentage)
+        end
 
-            window:Space()
+        window:ProgressBar("shrink-progress", curr, model.Shrink.Interval)
 
-            window:Texture("care-package-01", "/mods/battle-royale/textures/care-package-02.png", 316)
+        window:Space()
 
-            showText(window, helpText1, 55)
-            window:Space()
-            
-            window:Texture("care-package-02", "/mods/battle-royale/textures/care-package-02.png", 316)
-            
-            window:Space()
-            showText(window, helpText2, 55)
-            window:Space()
-            
-            window:Texture("care-package-03", "/mods/battle-royale/textures/care-package-03.png", 316)
-            
-            window:Space()
-            showText(window, helpText3, 55)
-            window:Space()
-            
-            window:Texture("shrink-01", "/mods/battle-royale/textures/shrink-01.png", 316)
+        --TODO Set up the filling of the danger zone through the UI
+        --ChangeFillingDangerArea(window, model)
 
-            window:Space()
+        -- construct shapes of next off areas
+        local shapes = { }
+        if model.Shrink.NextOffAreas then
+            for k, area in model.Shrink.NextOffAreas do
+                table.insert(shapes, { X = area.x0, Y = area.y0, Width = area.x1 - area.x0, Height = area.y1 - area.y0, Solid = true, Color = "44aa0000" })
+            end
+        end
 
-            window:EndList("help-list")
+        -- construct shapes of actual off areas
+        if model.Shrink.OffAreas then
+            for k, area in model.Shrink.OffAreas do
+                table.insert(shapes, { X = area.x0, Y = area.y0, Width = area.x1 - area.x0, Height = area.y1 - area.y0, Solid = true, Color = "44000000" })
+            end
+        end
 
-        end 
+        -- construct shape for care package
+        if model.Config.CarePackages then
+            if model.CarePackage.Coordinates then
+                local coords = model.CarePackage.Coordinates
+                table.insert(shapes, { X = (coords[1] / model.Config.Size[1]) - 0.02, Y = (coords[3] / model.Config.Size[2]) - 0.02, Width = 0.04, Height = 0.04, Solid = false, Color = "9900ffff" })
+            end
+        end
+
+        window:MapPreview("map", model.Config.Map, shapes)
+    end
+
+    if window:BeginTab(help) then
+
+        window:BeginList("help-list", 640)
+
+        window:Space()
+
+        window:Texture("care-package-01", "/mods/battle-royale/textures/care-package-02.png", 316)
+
+        showText(window, helpText1, 55)
+        window:Space()
+
+        window:Texture("care-package-02", "/mods/battle-royale/textures/care-package-02.png", 316)
+
+        window:Space()
+        showText(window, helpText2, 55)
+        window:Space()
+
+        window:Texture("care-package-03", "/mods/battle-royale/textures/care-package-03.png", 316)
+
+        window:Space()
+        showText(window, helpText3, 55)
+        window:Space()
+
+        window:Texture("shrink-01", "/mods/battle-royale/textures/shrink-01.png", 316)
+
+        window:Space()
+
+        window:EndList("help-list")
+
+    end
 
     window:EndTabBar("main-tab-bar")
 
