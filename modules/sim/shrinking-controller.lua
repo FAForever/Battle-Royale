@@ -100,13 +100,13 @@ function SyncToUI(isDelayed, currentArea, nextArea, interval)
 end
 
 --- Function that starts a thread that fills the non-playable area with X symbols
-function FillUnplayableArea(squareEdgeSize, xLineSize)
-    ForkThread(FillUnplayableAreaThread, squareEdgeSize, xLineSize)
+function FillUnplayableArea(squareEdgeSize)
+    ForkThread(FillUnplayableAreaThread, squareEdgeSize)
 end
 
 --- Fills the unplayable area with X symbols.
 --- The size of the X symbol depends on xLineSize, and the distance between the X symbols depends on squareEdgeSize
-function FillUnplayableAreaThread(squareEdgeSize, xLineSize)
+function FillUnplayableAreaThread(squareEdgeSize)
 
     local model = import("/mods/battle-royale/modules/sim/model.lua")
     local GetTerrainHeight = GetTerrainHeight
@@ -190,6 +190,7 @@ function FillUnplayableAreaThread(squareEdgeSize, xLineSize)
     end
 
     local points = {}
+    local xLineSize = math.floor(squareEdgeSize / 8)
 
     while true do
         WaitSeconds(0.1)
@@ -228,7 +229,10 @@ function ShrinkingThread(type, rate, delay, destructionTime)
     local nodeController = import("/mods/battle-royale/modules/sim/node-controller.lua")
     local unitController = import("/mods/battle-royale/modules/sim/unit-controller.lua")
 
-    local prng = import("/mods/battle-royale/modules/utils/PseudoRandom.lua").PseudoRandom:OnCreate({1, 2, 3, 4})
+    local prng = import("/mods/battle-royale/modules/utils/PseudoRandom.lua").PseudoRandom:OnCreate({ 1, 2, 3, 4 })
+
+    local sx0, sy0, sx1, sy1 = unpack(ScenarioInfo.MapData.PlayableRect)
+    local isShrinkDone = false
 
 
     -- tell UI about the delay before shrinking
@@ -238,12 +242,26 @@ function ShrinkingThread(type, rate, delay, destructionTime)
     WaitSeconds(delay)
 
     -- if non-instant destruction of a unit outside the playable area is selected, it will start a separate thread of gradual destruction.
-    if  not (destructionTime == 0) then
+    if not (destructionTime == 0) then
+        local squareEdgeSize = math.floor((sx1 - sx0) / 40)
         unitController.DamageOrDestroyStrandedUnits(destructionTime)
+
+        FillUnplayableArea(squareEdgeSize)
     end
 
-    while true do
+    local function CheckCanPlayableAreaShrink(model)
+        local minX = ((sx1 - sx0) / 100) * 15
+        local minY = ((sy1 - sy0) / 100) * 15
 
+        local px0, py0, px1, py1 = unpack(model.AfterShrink)
+
+        local xBool = px1 - px0 > minX
+        local yBool = py1 - py0 > minY
+
+        return xBool and yBool
+    end
+
+    while not isShrinkDone do
 
         if type == "pseudorandom" then
             ShrinkRandomly(prng, model)
@@ -267,8 +285,13 @@ function ShrinkingThread(type, rate, delay, destructionTime)
         -- wait up
         WaitSeconds(rate)
 
-        -- and shrink!
-        model.PlayableArea = table.deepcopy(model.AfterShrink)
+        -- and shrink if it possible!
+        if CheckCanPlayableAreaShrink(model) then
+            model.PlayableArea = table.deepcopy(model.AfterShrink)
+        else
+            model.AfterShrink = table.deepcopy(model.PlayableArea)
+            isShrinkDone = true
+        end
 
         -- reducing the playing area is only needed for the instant destruction mode.
         if destructionTime == 0 then
@@ -287,7 +310,7 @@ end
 --- Visualizes the playable area after shrinking. Expects to run in its own thread.
 function VisualizeShrinkingThread(destructionMode)
 
-    local nextAreaColor = "ff5555" --red
+    local nextAreaColor = "ff9900" --orange
     local currentAreaColor = "55ff55" --green
 
     -- upvalue for performance
