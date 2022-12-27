@@ -227,6 +227,7 @@ function ShrinkingThread(type, rate, delay, destructionTime)
     local ScenarioFramework = import("/lua/ScenarioFramework.lua")
     local model = import("/mods/Battle-Royale-by-Dark-Horse/modules/sim/model.lua")
     local nodeController = import("/mods/Battle-Royale-by-Dark-Horse/modules/sim/node-controller.lua")
+    local economicController = import("/mods/Battle-Royale-by-Dark-Horse/modules/sim/economic-controller.lua")
     local unitController = import("/mods/Battle-Royale-by-Dark-Horse/modules/sim/unit-controller.lua")
 
     local prng = import("/mods/Battle-Royale-by-Dark-Horse/modules/utils/PseudoRandom.lua").PseudoRandom:OnCreate({ 1, 2, 3, 4 })
@@ -299,6 +300,7 @@ function ShrinkingThread(type, rate, delay, destructionTime)
             unitController.DestroyStrandedUnits()
         end
         nodeController.UpdateNodes()
+        economicController.UpdateNodes()
     end
 end
 

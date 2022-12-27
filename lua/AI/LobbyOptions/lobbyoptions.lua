@@ -124,6 +124,39 @@ AIOpts = {
         },
     },
     {
+        default = 3,
+        label = "<LOC br_eco_packages_interval_label>Economic packages interval",
+        help = "<LOC br_eco_packages_interval_help>Determines how fast economic packages spawn.",
+        key = 'EconomicPackagesRate',
+        values = {
+            {
+                text = "<LOC br_eco_packages_interval_values_off_text>Off",
+                help = "<LOC br_eco_packages_interval_values_off_help>Disables economic package spawn.",
+                key = 0,
+            },
+            {
+                text = "<LOC br_eco_packages_interval_values_slow_text>Slow",
+                help = "<LOC br_eco_packages_interval_values_slow_help>A economic package spawns every 60 - 120 seconds.",
+                key = 60,
+            },
+            {
+                text = "<LOC br_eco_packages_interval_values_medium_text>Medium",
+                help = "<LOC br_eco_packages_interval_values_medium_help>A economic package spawns every 40 - 80 seconds.",
+                key = 40,
+            },
+            {
+                text = "<LOC br_eco_packages_interval_values_fast_text>Fast",
+                help = "<LOC br_eco_packages_interval_values_fast_help>A economic package spawns every 20 - 40 seconds.",
+                key = 20,
+            },
+            {
+                text = "<LOC br_eco_packages_interval_values_hyper_text>Hyper",
+                help = "<LOC br_eco_packages_interval_values_hyper_help>A economic package spawns every 10 - 20 seconds.",
+                key = 10,
+            },
+        },
+    },
+    {
         default = 2,
         label = "<LOC br_beacon_tech_level_label>Com beacon tech level",
         help = "<LOC br_beacon_tech_level_help>Determines the beacon of what tech level will appear after the death of the commander. The higher the mass cost of the killed player's units, the higher the tech level of the beacon, but the beacon capture time and the cost of capture in energy also increase with the  tech level.",
