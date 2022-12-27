@@ -3,6 +3,7 @@ function Entrypoint()
 
     local utils = import("/mods/battle-royale/modules/sim/utils.lua")
     local nodeController = import("/mods/battle-royale/modules/sim/node-controller.lua")
+    local economicController = import("/mods/battle-royale/modules/sim/economic-controller.lua")
     local shrinkingController = import("/mods/battle-royale/modules/sim/shrinking-controller.lua")
     local options = import("/mods/battle-royale/lua/ai/lobbyoptions/lobbyoptions.lua").AIOpts
 
@@ -28,6 +29,13 @@ function Entrypoint()
     if ScenarioInfo.Options.CarePackagesRate > 0 then
         nodeController.UpdateNodes()
         nodeController.CarePackages(ScenarioInfo.Options.CarePackagesRate, ScenarioInfo.Options.CarePackagesAmount, ScenarioInfo.Options.CarePackagesCurve)
+
+    end
+
+    -- initialize economic packages if applicable
+    if ScenarioInfo.Options.EconomicPackagesRate > 0 then
+        nodeController.UpdateNodes()
+        economicController.EconomicCarePackages(ScenarioInfo.Options.EconomicPackagesRate, ScenarioInfo.Options.CarePackagesCurve)
     end
 
     -- initialize shrinking
