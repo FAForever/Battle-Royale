@@ -1,5 +1,5 @@
 
-local ACUInfo = import('/mods/battle-royale/modules/sim/ACUInfo.lua')
+local ACUInfo = import('/mods/Battle-Royale-by-Dark-Horse/modules/sim/ACUInfo.lua')
 
 local oldACU = ACUUnit
 ACUUnit = Class(oldACU) {

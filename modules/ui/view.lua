@@ -66,7 +66,7 @@ end
 
 function CreateInterface(window, isReplay)
 
-    local model = import("/mods/battle-royale/modules/ui/model.lua")
+    local model = import("/mods/Battle-Royale-by-Dark-Horse/modules/ui/model.lua")
     local time = GameTime()
     local battleRoyale = LOC("<LOC br_ui_battle_royale>Battle Royale")
     local help = LOC("<LOC br_ui_help>Help")
@@ -144,24 +144,24 @@ function CreateInterface(window, isReplay)
 
         window:Space()
 
-        window:Texture("care-package-01", "/mods/battle-royale/textures/care-package-02.png", 316)
+        window:Texture("care-package-01", "/mods/Battle-Royale-by-Dark-Horse/textures/care-package-02.png", 316)
 
         showText(window, helpText1, 55)
         window:Space()
 
-        window:Texture("care-package-02", "/mods/battle-royale/textures/care-package-02.png", 316)
+        window:Texture("care-package-02", "/mods/Battle-Royale-by-Dark-Horse/textures/care-package-02.png", 316)
 
         window:Space()
         showText(window, helpText2, 55)
         window:Space()
 
-        window:Texture("care-package-03", "/mods/battle-royale/textures/care-package-03.png", 316)
+        window:Texture("care-package-03", "/mods/Battle-Royale-by-Dark-Horse/textures/care-package-03.png", 316)
 
         window:Space()
         showText(window, helpText3, 55)
         window:Space()
 
-        window:Texture("shrink-01", "/mods/battle-royale/textures/shrink-01.png", 316)
+        window:Texture("shrink-01", "/mods/Battle-Royale-by-Dark-Horse/textures/shrink-01.png", 316)
 
         window:Space()
 

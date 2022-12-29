@@ -1,6 +1,6 @@
 
 -- Initialize the units that can reside in care packages.
-CarePackages = import("/mods/battle-royale/modules/packer/units.lua").FindAllUnits()
+CarePackages = import("/mods/Battle-Royale-by-Dark-Horse/modules/packer/units.lua").FindAllUnits()
 
 --- The number of nodes that can be used to drop care packages on.
 NodeCount = 0

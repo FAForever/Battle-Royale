@@ -3,13 +3,13 @@
 function FindAllUnits ()
 
     local mods = {
-        nomads = { path = "/mods/battle-royale/modules/packer/units-nomads.lua" },
-        blackops = { path = "/mods/battle-royale/modules/packer/units-blackops.lua" },
-        brewlan = { path = "/mods/battle-royale/modules/packer/units-brewlan.lua" },
-        extremewars = { path = "/mods/battle-royale/modules/packer/units-extremewars.lua" },
-        marlo = { path = "/mods/battle-royale/modules/packer/units-marlo.lua" },
-        supremeunits = { path = "/mods/battle-royale/modules/packer/units-supremeunits.lua" },
-        totalmayhem = { path = "/mods/battle-royale/modules/packer/units-totalmayhem.lua" }
+        nomads = { path = "/mods/Battle-Royale-by-Dark-Horse/modules/packer/units-nomads.lua" },
+        blackops = { path = "/mods/Battle-Royale-by-Dark-Horse/modules/packer/units-blackops.lua" },
+        brewlan = { path = "/mods/Battle-Royale-by-Dark-Horse/modules/packer/units-brewlan.lua" },
+        extremewars = { path = "/mods/Battle-Royale-by-Dark-Horse/modules/packer/units-extremewars.lua" },
+        marlo = { path = "/mods/Battle-Royale-by-Dark-Horse/modules/packer/units-marlo.lua" },
+        supremeunits = { path = "/mods/Battle-Royale-by-Dark-Horse/modules/packer/units-supremeunits.lua" },
+        totalmayhem = { path = "/mods/Battle-Royale-by-Dark-Horse/modules/packer/units-totalmayhem.lua" }
     }
 
     -- separate check for nomads
@@ -37,7 +37,7 @@ function FindAllUnits ()
 	end
 
     -- start with base game units
-    local base = import("/mods/battle-royale/modules/packer/units-base.lua").UnitTable
+    local base = import("/mods/Battle-Royale-by-Dark-Horse/modules/packer/units-base.lua").UnitTable
 
     -- move over all the enabled mods
     for k, mod in mods do 

@@ -1,8 +1,8 @@
-local ACUInfo = import('/mods/battle-royale/modules/sim/ACUInfo.lua')
+local ACUInfo = import('/mods/Battle-Royale-by-Dark-Horse/modules/sim/ACUInfo.lua')
 local TransferUnitsOwnership = import('/lua/SimUtils.lua').TransferUnitsOwnership
 local EffectTemplates = import("/lua/EffectTemplates.lua")
 local EffectUtils = import("/lua/EffectUtilities.lua")
-local ShowDeathInfo = import("/mods/battle-royale/modules/ui/beacon-info.lua").ShowDeathInfo
+local ShowDeathInfo = import("/mods/Battle-Royale-by-Dark-Horse/modules/ui/beacon-info.lua").ShowDeathInfo
 local CarePackageTeleportIn = EffectTemplates.UnitTeleport01
 local CarePackageDestroyed = table.concatenate(EffectTemplates.CommanderQuantumGateInEnergy, EffectTemplates.AGravitonBolterHit01)
 
@@ -123,7 +123,7 @@ function CreateCommanderBeacon(selfIndex, units, xPos, yPos, zPos)
     ShowDeathInfo(nickname, unitsData)
 
 
-    local DrawCircleThread = import("/mods/battle-royale/modules/ui/beacon-info.lua").DrawCircleThread
+    local DrawCircleThread = import("/mods/Battle-Royale-by-Dark-Horse/modules/ui/beacon-info.lua").DrawCircleThread
 
 
     -- threads that draw a circle around the place of death of the commander

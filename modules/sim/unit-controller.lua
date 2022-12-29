@@ -10,7 +10,7 @@ end
 --- Instantly destroys units outside the play area.
 function DestroyStrandedUnits()
 
-    local model = import("/mods/battle-royale/modules/sim/model.lua")
+    local model = import("/mods/Battle-Royale-by-Dark-Horse/modules/sim/model.lua")
 
     -- retrieve the brains
     local brains = ArmyBrains
@@ -55,7 +55,7 @@ function DamageOrDestroyStrandedUnitsThread(destructionTime)
 
     while true do
 
-        local model = import("/mods/battle-royale/modules/sim/model.lua")
+        local model = import("/mods/Battle-Royale-by-Dark-Horse/modules/sim/model.lua")
 
         --- Returns the regen value, taking into account buffs and veterancy.
         local function GetCurrentRegen(unit)

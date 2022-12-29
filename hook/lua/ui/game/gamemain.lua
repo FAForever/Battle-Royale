@@ -9,7 +9,7 @@ function CreateUI(isReplay)
 
 	ForkThread(
 		function()
-			import('/mods/battle-royale/modules/ui/entrypoint.lua').Entrypoint(isReplay)
+			import('/mods/Battle-Royale-by-Dark-Horse/modules/ui/entrypoint.lua').Entrypoint(isReplay)
 		end
 	);
 

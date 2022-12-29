@@ -108,7 +108,7 @@ end
 --- The size of the X symbol depends on xLineSize, and the distance between the X symbols depends on squareEdgeSize
 function FillUnplayableAreaThread(squareEdgeSize)
 
-    local model = import("/mods/battle-royale/modules/sim/model.lua")
+    local model = import("/mods/Battle-Royale-by-Dark-Horse/modules/sim/model.lua")
     local GetTerrainHeight = GetTerrainHeight
 
     local currentArea = table.deepcopy(model.PlayableArea) -- needed to track if model.PlayableArea has changed
@@ -194,7 +194,7 @@ function FillUnplayableAreaThread(squareEdgeSize)
 
     while true do
         WaitSeconds(0.1)
-        local model = import("/mods/battle-royale/modules/sim/model.lua")
+        local model = import("/mods/Battle-Royale-by-Dark-Horse/modules/sim/model.lua")
 
         if not Equals(currentArea, model.PlayableArea) then
             currentArea = table.deepcopy(model.PlayableArea)
@@ -225,11 +225,11 @@ function ShrinkingThread(type, rate, delay, destructionTime)
 
     -- needed for shrinking
     local ScenarioFramework = import("/lua/ScenarioFramework.lua")
-    local model = import("/mods/battle-royale/modules/sim/model.lua")
-    local nodeController = import("/mods/battle-royale/modules/sim/node-controller.lua")
-    local unitController = import("/mods/battle-royale/modules/sim/unit-controller.lua")
+    local model = import("/mods/Battle-Royale-by-Dark-Horse/modules/sim/model.lua")
+    local nodeController = import("/mods/Battle-Royale-by-Dark-Horse/modules/sim/node-controller.lua")
+    local unitController = import("/mods/Battle-Royale-by-Dark-Horse/modules/sim/unit-controller.lua")
 
-    local prng = import("/mods/battle-royale/modules/utils/PseudoRandom.lua").PseudoRandom:OnCreate({ 1, 2, 3, 4 })
+    local prng = import("/mods/Battle-Royale-by-Dark-Horse/modules/utils/PseudoRandom.lua").PseudoRandom:OnCreate({ 1, 2, 3, 4 })
 
     local sx0, sy0, sx1, sy1 = unpack(ScenarioInfo.MapData.PlayableRect)
     local isShrinkDone = false
@@ -343,7 +343,7 @@ function VisualizeShrinkingThread(destructionMode)
     while true do
         WaitSeconds(0.1)
 
-        local model = import("/mods/battle-royale/modules/sim/model.lua")
+        local model = import("/mods/Battle-Royale-by-Dark-Horse/modules/sim/model.lua")
 
         DrawArea(model.AfterShrink, nextAreaColor)
 

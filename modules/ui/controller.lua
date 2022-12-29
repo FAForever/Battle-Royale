@@ -3,20 +3,20 @@
 
 --- Stores the config received from the sync in the model.
 function StoreOptions(config)
-    local model = import("/mods/battle-royale/modules/ui/model.lua")
+    local model = import("/mods/Battle-Royale-by-Dark-Horse/modules/ui/model.lua")
     model.Config = table.deepcopy(config)
 end
 
 --- Stores the information surrounding the next shrink from the sync in the model.
 function StoreCarePackageInformation(information)
-    local model = import("/mods/battle-royale/modules/ui/model.lua")
+    local model = import("/mods/Battle-Royale-by-Dark-Horse/modules/ui/model.lua")
     model.CarePackage = table.deepcopy(information)
     model.CarePackage.Timestamp = GameTime()
 end
 
 --- Stores information about the commander's beacon  from the sync in the model.
 function StoreBeaconInformation(information)
-    local model = import("/mods/battle-royale/modules/ui/model.lua")
+    local model = import("/mods/Battle-Royale-by-Dark-Horse/modules/ui/model.lua")
     model.Beacon = table.deepcopy(information)
     model.Beacon.Timestamp = GameTime()
 end
@@ -68,7 +68,7 @@ end
 
 --- Stores the information surrounding the current care package from the sync in the model.
 function StoreShrinkInformation(information)
-    local model = import("/mods/battle-royale/modules/ui/model.lua")
+    local model = import("/mods/Battle-Royale-by-Dark-Horse/modules/ui/model.lua")
     model.Shrink = table.deepcopy(information)
     model.Shrink.Timestamp = GameTime()
     model.Shrink.OffAreas = OffMapAreas(model.Shrink.CurrentArea, model.Config.MapArea, model.Config.Size)

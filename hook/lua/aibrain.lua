@@ -1,8 +1,8 @@
 local oldAIBrain = AIBrain
 
 local TransferUnitsOwnership = import('/lua/SimUtils.lua').TransferUnitsOwnership
-local ACUInfo = import('/mods/battle-royale/modules/sim/ACUInfo.lua')
-local CreateCommanderBeacon = import("/mods/battle-royale/modules/sim/beacon-controller.lua").CreateCommanderBeacon
+local ACUInfo = import('/mods/Battle-Royale-by-Dark-Horse/modules/sim/ACUInfo.lua')
+local CreateCommanderBeacon = import("/mods/Battle-Royale-by-Dark-Horse/modules/sim/beacon-controller.lua").CreateCommanderBeacon
 local TargetArmy = ScenarioInfo.Options.TargetArmy
 
 function ResetUnitOrders(units)

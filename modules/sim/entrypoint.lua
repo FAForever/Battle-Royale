@@ -1,10 +1,10 @@
 
 function Entrypoint()
 
-    local utils = import("/mods/battle-royale/modules/sim/utils.lua")
-    local nodeController = import("/mods/battle-royale/modules/sim/node-controller.lua")
-    local shrinkingController = import("/mods/battle-royale/modules/sim/shrinking-controller.lua")
-    local options = import("/mods/battle-royale/lua/ai/lobbyoptions/lobbyoptions.lua").AIOpts
+    local utils = import("/mods/Battle-Royale-by-Dark-Horse/modules/sim/utils.lua")
+    local nodeController = import("/mods/Battle-Royale-by-Dark-Horse/modules/sim/node-controller.lua")
+    local shrinkingController = import("/mods/Battle-Royale-by-Dark-Horse/modules/sim/shrinking-controller.lua")
+    local options = import("/mods/Battle-Royale-by-Dark-Horse/lua/ai/lobbyoptions/lobbyoptions.lua").AIOpts
 
     -- initialize area rect to entire map if applicable
     ScenarioInfo.MapData.PlayableRect = ScenarioInfo.MapData.PlayableRect or {0, 0, ScenarioInfo.size[1], ScenarioInfo.size[2]}

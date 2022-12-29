@@ -10,7 +10,7 @@ function BeginSession()
 
     ForkThread(
 		function()
-			import('/mods/battle-royale/modules/sim/entrypoint.lua').Entrypoint()
+			import('/mods/Battle-Royale-by-Dark-Horse/modules/sim/entrypoint.lua').Entrypoint()
 		end
 	);
 

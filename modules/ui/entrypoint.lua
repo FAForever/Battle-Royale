@@ -21,7 +21,7 @@ local function _CreateInterface(isReplay)
                 ok, message = pcall (
                     function () 
                         -- load in interface to receive updates
-                        interface = import("/mods/battle-royale/modules/ui/view.lua")
+                        interface = import("/mods/Battle-Royale-by-Dark-Horse/modules/ui/view.lua")
                         interface.CreateInterface( window, isReplay) 
                     end
                 )

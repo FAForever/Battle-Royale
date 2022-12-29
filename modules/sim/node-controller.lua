@@ -9,7 +9,7 @@ local EffectUtils = import("/lua/EffectUtilities.lua")
 local CarePackageTeleportIn = EffectTemplates.UnitTeleport01
 local CarePackageDestroyed = table.concatenate(EffectTemplates.CommanderQuantumGateInEnergy, EffectTemplates.AGravitonBolterHit01)
 local CarePackageOnWater = EffectTemplates.DefaultSeaUnitBackWake01
-local ProblematicUnits = import("/mods/battle-royale/modules/packer/units-problematic.lua").UnitTable
+local ProblematicUnits = import("/mods/Battle-Royale-by-Dark-Horse/modules/packer/units-problematic.lua").UnitTable
 local SACUWithExperimental = ScenarioInfo.Options.SacuSpawn
 local NavalExps = ScenarioInfo.Options.NavalExps
 local ExpsCounter = 0
@@ -31,7 +31,7 @@ InitExpsCounter()
 --- Removes nodes that became invalid because they dropped out of the map
 function UpdateNodes(nodeCount, nodes)
 
-    local model = import("/mods/battle-royale/modules/sim/model.lua")
+    local model = import("/mods/Battle-Royale-by-Dark-Horse/modules/sim/model.lua")
 
     -- we adjust the count, leaving the nodes in-place
     local count = 0
@@ -68,7 +68,7 @@ function DebugNodes()
 
             WaitSeconds(0.1)
 
-            local model = import("/mods/battle-royale/modules/sim/model.lua")
+            local model = import("/mods/Battle-Royale-by-Dark-Horse/modules/sim/model.lua")
 
             for k = 1, model.NodeCount do
 
@@ -213,7 +213,7 @@ end
 --- Retrieves a random node.
 function GetRandomNode()
     -- retrieve a random node
-    local model = import("/mods/battle-royale/modules/sim/model.lua")
+    local model = import("/mods/Battle-Royale-by-Dark-Horse/modules/sim/model.lua")
     local k = math.floor(Random() * model.NodeCount) + 1
     return model.Nodes[k]
 end
@@ -314,7 +314,7 @@ function CarePackageThread(rate, amount, curve)
 
         -- retrieve valid entries from configuration
         local entries = false
-        local config = import("/mods/battle-royale/modules/config.lua")
+        local config = import("/mods/Battle-Royale-by-Dark-Horse/modules/config.lua")
         if node.InWater then
             entries = config.GetValidEntries(config.Navy, minutes)
         else
@@ -332,7 +332,7 @@ function CarePackageThread(rate, amount, curve)
             end
 
             -- retrieve random blueprints from that entry
-            local model = import("/mods/battle-royale/modules/sim/model.lua")
+            local model = import("/mods/Battle-Royale-by-Dark-Horse/modules/sim/model.lua")
             local bps = GetRandomBlueprints(model.CarePackages[entry.Type], amount * entry.Count)
             entry.Type = oldEntryType
 
